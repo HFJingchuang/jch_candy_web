@@ -1,0 +1,246 @@
+/* 全局 */
+
+html {
+    height: 100%;
+}
+
+body {
+    font-family: 'PingFang SC', "Helvetica Neue", Helvetica, "microsoft yahei", arial, STHeiTi, sans-serif !important;
+    padding: 0;
+    max-width: 640px;
+    margin: 0 auto !important;
+    height: 100%;
+    font-size: 1.4rem;
+}
+
+#app {
+    height: 100%;
+    margin-top: 0 !important;
+}
+
+/* 首页 */
+
+.home {
+    background-color: #cf2546;
+    text-align: center;
+    height: 100%;
+}
+
+.home .home-top {
+    position: relative;
+    left: 0;
+    top: 0;
+}
+
+.home .home-top .home-top-bg {
+    width: 100%;
+}
+
+.home .home-top .candy-code {
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    height: 36%;
+}
+
+.home .home-top .candy-code textarea {
+    border: 1px solid #dedede;
+    border-radius: 2px;
+    height: 100%;
+    padding: .8rem;
+    width: 80%;
+    resize: none;
+    color: #5d4220;
+    font-size: 14px;
+    outline: none;
+}
+
+.home .home-top .distribution-candy-button {
+    width: 126px;
+    height: 38px;
+    cursor: pointer;
+    line-height: 38px;
+    background-color: #dd2436;
+    border: 0 none;
+    border-radius: 3rem;
+    font-size: 16px;
+    font-weight: 400;
+    color: #fff7c1;
+    position: absolute;
+    left: 50%;
+    bottom: 26%;
+    transform: translateX(-50%);
+}
+
+.home .home-bottom {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    max-width: 640px;
+}
+
+.home .home-bottom .jump-operation {
+    position: relative;
+    z-index: 2;
+    margin-top: 10px;
+    color: #fcdbb2;
+    font-size: 14px;
+    opacity: .7;
+}
+
+.home-bottom .provided-title {
+    position: relative;
+    z-index: 2;
+    margin-top: 10px;
+    color: #fcdbb2;
+    font-size: 14px;
+    opacity: .7;
+}
+
+.jump-operation .space {
+    margin: 0 10px;
+}
+
+a {
+    text-decoration: none;
+    color: #fcdbb2;
+}
+
+.jump-operation span {
+    cursor: pointer;
+}
+
+/* 子页面头部导航栏 */
+
+.nav-bar {
+    background-color: #ce2344;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-bar .header-div {
+    height: 44px;
+    line-height: 44px;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1.25rem;
+}
+
+.nav-bar .back-icon {
+    color: #fff;
+}
+
+.nav-bar .header-title {
+    color: #fff;
+    font-size: 1.2rem;
+    max-width: 60%;
+    margin: 0 auto;
+}
+
+.send-candy {
+    padding: 0;
+    margin: 0;
+}
+
+.send-candy .overlay-div {
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.send-candy .overlay-text {
+    margin-left: 5px;
+}
+
+.candy-record {
+    padding: 0;
+    margin: 0;
+}
+
+.candy-record .cell-title {
+    text-align: center;
+}
+
+.candy-record .cell-title-start {
+    text-align: start;
+}
+
+.candy-record .list-left {
+    margin-left: 5px;
+}
+
+.van-cell {
+    padding: 10px 8px !important;
+}
+
+.candy-record .cell-title-end {
+    text-align: end;
+}
+
+.candy-record .list-right {
+    margin-right: 5px !important;
+}
+
+.candy-record .record-list {
+    text-align: center;
+    font-size: 14px;
+    line-height: 35px;
+}
+
+.candy-detail {
+    max-width: 640px;
+    padding: 0;
+    margin: 0;
+    font-size: 1rem;
+}
+
+.detail-div {
+    height: 90px;
+}
+
+.detail-div .detail-col-start {
+    line-height: 80px;
+    text-align: end;
+    font-size: 2rem;
+}
+
+.detail-div .detail-col-end {
+    line-height: 90px;
+    text-align: start;
+    font-size: 1rem;
+}
+
+.list-div .list-item {
+    line-height: 35px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.about-us {
+    padding: 0;
+    margin: 0;
+}
+
+.about-us .about-us-content {
+    margin: 0 5px;
+    color: #6b5334;
+    text-align: start;
+    line-height: 30px;
+    font-size: 1rem;
+}
+
+.about-us-content p {
+    margin: 0;
+}
+
+.about-us-content a {
+    color: blue;
+}
