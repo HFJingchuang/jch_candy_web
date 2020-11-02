@@ -5,13 +5,16 @@
     <!-- 红包记录Tab -->
     <van-tabs v-model="active">
       <van-tab title="我抢的">
-        <van-cell>
+        <van-cell v-show="getList.length != 0">
           <van-row>
             <van-col class="cell-title-start" span="6">获取时间</van-col>
             <van-col class="cell-title" span="8">转账hash</van-col>
             <van-col class="cell-title" span="6">红包金额</van-col>
-          </van-row> </van-cell
-        ><van-list :finished="getFinished" @load="getLoad">
+          </van-row>
+        </van-cell>
+        <van-cell v-show="getList.length == 0">
+          <van-col class="cell-title" span="24">暂无数据</van-col> </van-cell
+        ><van-list @load="getLoad">
           <v-row
             v-for="item in getList"
             :key="item"
@@ -46,14 +49,17 @@
         </van-list></van-tab
       >
       <van-tab title="我发的">
-        <van-cell>
+        <van-cell v-show="sendList.length != 0">
           <van-row>
             <van-col class="cell-title-start" span="8">创建时间</van-col>
             <van-col class="cell-title" span="8">转账hash</van-col>
             <van-col class="cell-title-end" span="8">红包金额</van-col>
           </van-row>
         </van-cell>
-        <van-list :finished="sendFinished" @load="sendLoad">
+        <van-cell v-show="sendList.length == 0">
+          <van-col class="cell-title" span="24">暂无数据</van-col>
+        </van-cell>
+        <van-list @load="sendLoad">
           <div
             v-for="item in sendList"
             :key="item"
@@ -100,12 +106,8 @@ export default {
       active: 0,
       getList: [],
       getCount: 0,
-      getLoading: true,
-      getFinished: true,
       sendList: [],
       sendCount: 0,
-      sendLoading: true,
-      sendFinished: true,
     };
   },
   mounted() {
@@ -117,7 +119,8 @@ export default {
     async getLoad() {
       let wallet = await tp.getCurrentWallet();
       let address = wallet.data.address;
-      // let res = await getObtainCandyList(address);
+      // let address = "jKBCwv4EcyvYtD4PafP17PLpnnZ16szQsC";
+      let res = await getObtainCandyList(address);
       if (res.status == 0) {
         this.getList = res.data.list;
         this.getCount = res.data.total;

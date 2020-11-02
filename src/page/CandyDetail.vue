@@ -34,12 +34,15 @@
     </div>
     <!-- 列表详情 -->
     <div class="list-div">
-      <van-cell>
+      <van-cell v-show="list.length != 0">
         <van-row>
           <van-col class="cell-title-start" span="8">时间</van-col>
           <van-col class="cell-title" span="8">转账hash</van-col>
           <van-col class="cell-title-end" span="8">金额</van-col>
         </van-row>
+      </van-cell>
+      <van-cell v-show="list.length == 0">
+        <van-col class="cell-title" span="24">暂无数据</van-col>
       </van-cell>
       <div v-for="item in list" :key="item" :title="item" class="list-item">
         <van-col span="8">
@@ -94,6 +97,7 @@ export default {
     async getCandyDetailById() {
       let wallet = await tp.getCurrentWallet();
       let address = wallet.data.address;
+      // let address = "jKBCwv4EcyvYtD4PafP17PLpnnZ16szQsC";
       let res = await getCandyDetail(this.id);
       if (res.status == 0) {
         this.detail = res.data.packet;

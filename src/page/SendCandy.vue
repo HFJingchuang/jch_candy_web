@@ -135,6 +135,7 @@ export default {
     async sendCandy() {
       let wallet = await tp.getCurrentWallet();
       let address = wallet.data.address;
+      // let address = "jKBCwv4EcyvYtD4PafP17PLpnnZ16szQsC";
       // 签名
       let res = await signTransaction(
         address,
@@ -143,11 +144,12 @@ export default {
         this.totalAmount,
         this.candyRemark
       );
-      if (res.result) {
+      console.log(res.result && res.data)
+      if (res.result && res.data) {
         this.showOverlay = true;
         // 发送交易
         let sendRes = await sendRawTransaction(res.data);
-        await new Promise((resolve) => setTimeout(resolve, 5000));
+        console.log(sendRes)
         if (sendRes.result) {
           let createRes = await createCandy(
             this.candyType,

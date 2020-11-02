@@ -54,6 +54,7 @@ export default {
       if (this.message) {
         let wallet = await tp.getCurrentWallet();
         let address = wallet.data.address;
+      // let address = "jKBCwv4EcyvYtD4PafP17PLpnnZ16szQsC";
         let res = await distributionCandy(address, this.message);
         if (res.status == 0) {
           Notify({
