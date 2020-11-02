@@ -7,8 +7,8 @@
       <p>{{ content }}</p>
       联系我们：
       <p>官网：{{ this.url }}</p>
-      <p>QQ群： {{ this.qqGroup }}</p>
-      <p>QQ：{{ this.qq }}</p>
+      <!-- <p>QQ群： {{ this.qqGroup }}</p>
+      <p>QQ：{{ this.qq }}</p> -->
     </div>
   </div>
 </template>

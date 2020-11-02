@@ -34,6 +34,13 @@ module.exports = {
                     '^/serve': '/'
                 }
             },
+            '/node0': {
+                target: process.env.VUE_APP_NODE_URL0,
+                changeOrigin: true,
+                pathRewrite: {
+                    '^/node0': '/'
+                }
+            },
             '/node1': {
                 target: process.env.VUE_APP_NODE_URL1,
                 changeOrigin: true,
@@ -61,14 +68,8 @@ module.exports = {
                 pathRewrite: {
                     '^/node4': '/'
                 }
-            },
-            '/node5': {
-                target: process.env.VUE_APP_NODE_URL5,
-                changeOrigin: true,
-                pathRewrite: {
-                    '^/node5': '/'
-                }
             }
+
         },
     },
 

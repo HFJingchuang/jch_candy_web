@@ -4,40 +4,60 @@
     <NavBar title="红包详情" backUrl="/candyRecord"></NavBar>
     <!-- 红包信息 -->
     <div class="detail-div">
-      <v-row>
+      <v-row v-if="getAmount">
         <van-col span="12" class="detail-col-start">
-          {{ amount }}
+          {{ getAmount }}
         </van-col>
         <van-col span="12" class="detail-col-end">
-          {{ coinType }}
+          {{ detail.coinType }}
         </van-col>
       </v-row>
+      <v-row>
+        <van-col span="24">{{ statusMsg }}</van-col>
+        <van-col span="24" v-if="refundHash"
+          >{{ formatHash(refundHash) }}
+          <Clipboard
+            ref="refundHash"
+            @click.native="copyRefundHash(refundHash)"
+          ></Clipboard
+        ></van-col>
+      </v-row>
+      <van-cell class="detail-text">
+        <v-row>
+          <van-col>
+            已领取{{ getNum }}/{{ detail.num }}份, 共{{ detail.amount }}&nbsp;{{
+              detail.coinType
+            }}
+          </van-col>
+        </v-row>
+      </van-cell>
     </div>
     <!-- 列表详情 -->
     <div class="list-div">
       <van-cell>
-        <v-row>
-          <van-col>
-            已领取{{ getNum }}/{{ num }}份, 共{{ getAmount }}/{{
-              amount
-            }}&nbsp;{{ coinType }}
-          </van-col>
-        </v-row>
+        <van-row>
+          <van-col class="cell-title-start" span="8">时间</van-col>
+          <van-col class="cell-title" span="8">转账hash</van-col>
+          <van-col class="cell-title-end" span="8">金额</van-col>
+        </van-row>
       </van-cell>
-
       <div v-for="item in list" :key="item" :title="item" class="list-item">
         <van-col span="8">
-          <div>{{ formatAt(item.updatedAt) }}</div>
+          <div class="cell-title-start list-left">
+            {{ formatAt(item.updatedAt) }}
+          </div>
         </van-col>
         <van-col span="8">
-          {{ formatHash(item.beneficiary) }}
+          {{ formatHash(item.hash) }}
           <Clipboard
             ref="clipboard"
-            @click.native="copyTextToClipboard(item.beneficiary)"
+            @click.native="copyTextToClipboard(item.hash)"
           ></Clipboard>
         </van-col>
         <van-col span="8"
-          ><div>{{ item.amount }}&nbsp;&nbsp;{{ item.coinType }}</div></van-col
+          ><div class="cell-title-end list-right">
+            {{ item.amount }}&nbsp;&nbsp;{{ detail.coinType }}
+          </div></van-col
         >
       </div>
     </div>
@@ -63,9 +83,7 @@ export default {
       list: [],
       getNum: 0,
       getAmount: 0,
-      num: 0,
-      amount: 0,
-      coinType: "SWTC",
+      statusMsg: "",
     };
   },
   mounted() {
@@ -74,22 +92,45 @@ export default {
   },
   methods: {
     async getCandyDetailById() {
+      let wallet = await tp.getCurrentWallet();
+      let address = wallet.data.address;
       let res = await getCandyDetail(this.id);
       if (res.status == 0) {
+        this.detail = res.data.packet;
         this.list = res.data.list;
-        if (this.list.length > 0) {
-          var tmp = this.list[0];
-          this.num = tmp.num;
-          this.getNum = new BigNumber(this.num).minus(tmp.remainder);
-          this.amount = tmp["packet.amount"];
-          this.getAmount = new BigNumber(this.amount).minus(tmp.balance);
+        if (this.detail) {
+          this.getNum = new BigNumber(this.detail.num).minus(
+            this.detail.remainder
+          );
+          if (this.detail.remainder == 0) {
+            if (this.detail.is_refund == 1) {
+              // 退款
+              this.statusMsg =
+                "已退款，退款金额：" +
+                this.detail.refund +
+                " " +
+                this.detail.coinType;
+            } else {
+              this.statusMsg = "已完成";
+            }
+          } else {
+            this.statusMsg = "进行中";
+          }
         }
+        this.list.forEach((e) => {
+          if (e.beneficiary == address) {
+            this.getAmount = e.amount;
+          }
+        });
       } else {
         Notify({ type: "danger", message: "获取数据失败" });
       }
     },
     copyTextToClipboard(text) {
       this.$refs.clipboard[0].copyToClipboard(text);
+    },
+    copyRefundHash(hash) {
+      this.$refs.refundHash.copyToClipboard(hash);
     },
     formatAt(time) {
       return formatTime(time);

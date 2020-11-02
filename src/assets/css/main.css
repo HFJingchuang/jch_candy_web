@@ -70,7 +70,30 @@ body {
     color: #fff7c1;
     position: absolute;
     left: 50%;
-    bottom: 26%;
+    bottom: 25%;
+    transform: translateX(-50%);
+}
+
+.home .home-center {
+    font-size: 16px;
+    font-weight: 400;
+    color: #fff7c1;
+}
+
+.home-center .send-candy {
+    width: 126px;
+    height: 38px;
+    margin-top: 10px;
+    cursor: pointer;
+    line-height: 38px;
+    background-color: #fff7c1;
+    border: 0 none;
+    border-radius: 3rem;
+    font-size: 16px;
+    font-weight: 400;
+    color: #dd2436;
+    position: absolute;
+    left: 50%;
     transform: translateX(-50%);
 }
 
@@ -165,15 +188,15 @@ a {
     margin: 0;
 }
 
-.candy-record .cell-title {
+.cell-title {
     text-align: center;
 }
 
-.candy-record .cell-title-start {
+ .cell-title-start {
     text-align: start;
 }
 
-.candy-record .list-left {
+.list-left {
     margin-left: 5px;
 }
 
@@ -181,11 +204,11 @@ a {
     padding: 10px 8px !important;
 }
 
-.candy-record .cell-title-end {
+.cell-title-end {
     text-align: end;
 }
 
-.candy-record .list-right {
+.list-right {
     margin-right: 5px !important;
 }
 
@@ -193,6 +216,12 @@ a {
     text-align: center;
     font-size: 14px;
     line-height: 35px;
+}
+
+.record-list .appeal-button {
+    margin: 1px 0;
+    text-align: center;
+    background: bisque;
 }
 
 .candy-detail {
@@ -203,17 +232,31 @@ a {
 }
 
 .detail-div {
-    height: 90px;
+    background-color: #ce2344 !important;
+    padding-top: 15px;
+    color: beige;
+}
+
+.detail-text {
+    background-color: #ce2344 !important;
+}
+
+.detail-text .van-cell__value {
+    color: beige !important;
+}
+
+.detail-text .van-cell__value--alone {
+    color: beige !important;
 }
 
 .detail-div .detail-col-start {
-    line-height: 80px;
     text-align: end;
     font-size: 2rem;
 }
 
 .detail-div .detail-col-end {
-    line-height: 90px;
+    margin-top: 18px;
+    padding-left: 5px;
     text-align: start;
     font-size: 1rem;
 }

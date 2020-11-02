@@ -7,29 +7,39 @@
       <van-tab title="我抢的">
         <van-cell>
           <van-row>
-            <van-col class="cell-title-start" span="8">获取时间</van-col>
+            <van-col class="cell-title-start" span="6">获取时间</van-col>
             <van-col class="cell-title" span="8">转账hash</van-col>
-            <van-col class="cell-title-end" span="8">红包金额</van-col>
+            <van-col class="cell-title" span="6">红包金额</van-col>
           </van-row> </van-cell
-        ><van-list
-          :finished="getFinished"
-          finished-text="暂只支持查看前20条数据"
-          @load="getLoad"
-        >
+        ><van-list :finished="getFinished" @load="getLoad">
           <v-row
             v-for="item in getList"
             :key="item"
             :title="item"
             class="record-list"
-            @click="goCandyDetail(item.id)"
           >
-            <van-col span="8" class="cell-title-start">
-              <div class="list-left">{{ formatAt(item.updatedAt) }}</div>
-            </van-col>
-            <van-col span="8">{{ formatHash(item.hash) }}</van-col>
-            <van-col span="8" class="cell-title-end"
+            <div @click="goCandyDetail(item['packet.id'])">
+              <van-col span="6">
+                <div class="cell-title-start list-left">
+                  {{ formatAt(item.updatedAt) }}
+                </div>
+              </van-col>
+              <van-col span="8">{{ formatHash(item.hash) }}</van-col>
+              <van-col span="6"
+                ><div>
+                  {{ item.amount }}&nbsp;&nbsp;{{ item.coin_type }}
+                </div></van-col
+              >
+            </div>
+            <van-col span="4" class="cell-title-end"
               ><div class="list-right">
-                {{ item.amount }}&nbsp;&nbsp;{{ item.coin_type }}
+                <div
+                  class="appeal-button"
+                  v-show="item.isFail"
+                  @click="makeUp(item.id, item.hash)"
+                >
+                  补偿
+                </div>
               </div></van-col
             >
           </v-row>
@@ -43,11 +53,7 @@
             <van-col class="cell-title-end" span="8">红包金额</van-col>
           </van-row>
         </van-cell>
-        <van-list
-          :finished="sendFinished"
-          finished-text="暂只支持查看前20条数据"
-          @load="sendLoad"
-        >
+        <van-list :finished="sendFinished" @load="sendLoad">
           <div
             v-for="item in sendList"
             :key="item"
@@ -55,12 +61,14 @@
             class="record-list"
             @click="goCandyDetail(item.id)"
           >
-            <van-col span="8" class="cell-title-start">
-              <div class="list-left">{{ formatAt(item.createdAt) }}</div>
+            <van-col span="8">
+              <div class="cell-title-start list-left">
+                {{ formatAt(item.createdAt) }}
+              </div>
             </van-col>
             <van-col span="8">{{ formatHash(item.hash) }}</van-col>
-            <van-col span="8" class="cell-title-end"
-              ><div class="list-right">
+            <van-col span="8"
+              ><div class="cell-title-end list-right">
                 {{ item.amount }}&nbsp;&nbsp;{{ item.coin_type }}
               </div></van-col
             >
@@ -79,6 +87,8 @@ import {
   getObtainCandyList,
   formatTime,
   formatTextOverflow,
+  getTransactionStatus,
+  makeUpCandy,
 } from "../js/utils";
 export default {
   name: "candyRecord",
@@ -87,7 +97,6 @@ export default {
   },
   data: function () {
     return {
-      test: [{ name: 1 }, { name: 2 }, { name: 3 }, { name: 4 }],
       active: 0,
       getList: [],
       getCount: 0,
@@ -108,11 +117,11 @@ export default {
     async getLoad() {
       let wallet = await tp.getCurrentWallet();
       let address = wallet.data.address;
-      // let address = "jKBCwv4EcyvYtD4PafP17PLpnnZ16szQsC";
-      let res = await getObtainCandyList(address);
+      // let res = await getObtainCandyList(address);
       if (res.status == 0) {
         this.getList = res.data.list;
         this.getCount = res.data.total;
+        await this.getCandyStatus();
       } else {
         Notify({ type: "danger", message: "获取数据失败" });
       }
@@ -126,8 +135,28 @@ export default {
       if (res.status == 0) {
         this.sendList = res.data.list;
         this.sendCount = res.data.total;
+        // 判定红包是否转账成功
       } else {
         Notify({ type: "danger", message: "获取数据失败" });
+      }
+    },
+    // 红包补偿
+    async makeUp(id, hash) {
+      let res = await makeUpCandy(id);
+      if (res.status == 0) {
+        await this.getLoad();
+        Notify({ type: "success", message: "红包已重新发送。" });
+      } else {
+        Notify({ type: "danger", message: "红包补偿失败！" });
+      }
+    },
+    // 判断红包是否转账成功
+    async getCandyStatus() {
+      for (let i = 0, len = this.getList.length; i < len; i++) {
+        let status = await getTransactionStatus(this.getList[i].hash);
+        if (!status) {
+          this.getList[i].isFail = true;
+        }
       }
     },
     goCandyDetail(id) {

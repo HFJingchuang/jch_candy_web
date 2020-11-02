@@ -162,6 +162,20 @@ export const distributionCandy = async (address, id) => {
     return res.data;
 }
 
+// 获取服务共发出的红包数量
+export const getPacketCount = async () => {
+    let url = serverUrl + "/getPacketCount";
+    let res = await axios.get(url);
+    return res.data;
+}
+
+// 红包申诉
+export const makeUpCandy = async (id) => {
+    let url = serverUrl + "/makeUp";
+    let res = await axios.post(url, { id: id });
+    return res.data;
+}
+
 // 获取发出的红包列表
 export const getSendCandyList = async (address) => {
     let url = serverUrl + "/getPacketByAddr?address=" + address;
