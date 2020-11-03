@@ -1,3 +1,10 @@
+<!--
+ * @Description: 
+ * @Author: gwang
+ * @Date: 2020-11-03 14:14:53
+ * @LastEditors: gwang
+ * @LastEditTime: 2020-11-03 16:10:52
+-->
 <template>
   <div class="home">
     <div class="home-top">
@@ -16,7 +23,15 @@
       </button>
     </div>
     <div class="home-center">
-      <span v-if="this.candyCount">共成功发出{{ this.candyCount }}个红包</span>
+      <div>
+        <span style="display: inline-block; font-size: small; color: white"
+          >成功发出红包总数：</span
+        >
+        <span style="font-weight: bold">{{ this.candyCount }} </span>
+        <svg class="icon" aria-hidden="true">
+          <use xlink:href="#icon-hongbao"></use>
+        </svg>
+      </div>
       <div class="send-candy" @click="goSendCandyPage">
         <span>发红包</span>
       </div>
@@ -32,7 +47,7 @@
         </router-link>
       </div>
       <div class="provided-title">
-        <span>powered by 合肥井创数字科技有限公司</span>
+        <span>Powered by 合肥井创数字科技有限公司</span>
       </div>
     </div>
   </div>
@@ -46,7 +61,7 @@ export default {
   data: function () {
     return {
       message: "",
-      candyCount: "",
+      candyCount: "" || "0",
       loading: false,
     };
   },
