@@ -99,7 +99,12 @@ import NavBar from "../components/NavBar";
 import { Dialog, Notify } from "vant";
 const coin = require("../../static/coin.json");
 const BigNumber = require("bignumber.js");
-import { signTransaction, sendRawTransaction, createCandy } from "../js/utils";
+import {
+  signTransaction,
+  sendRawTransaction,
+  createCandy,
+  encodePwd,
+} from "../js/utils";
 export default {
   name: "sendCandy",
   components: {
@@ -156,7 +161,7 @@ export default {
           );
           this.showOverlay = false;
           if (createRes.status == 0) {
-            let candyId = createRes.data.id;
+            let candyId = encodePwd(createRes.data.id);
             Dialog.alert({
               title: "红包创建成功",
               message: "红包口令：" + candyId,

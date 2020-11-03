@@ -3,7 +3,9 @@ const axios = require('axios');
 axios.create({ headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' } });
 axios.defaults.baseURL = process.env.VUE_APP_BASE_URL;
 const serverUrl = "/api";
-
+const hongbao = "🧧"
+const prefix = "井创" + hongbao + " ";
+const suffix = " 👉TP"
 
 /**
  * tp签名
@@ -253,4 +255,14 @@ function convertStringToHex(in_str) {
         out_str += (" 00" + Number(str.charCodeAt(i)).toString(16)).substr(-2);
     }
     return out_str.toUpperCase();
+}
+// 口令解密
+export const decodePwd = (password) => {
+    return password.replace(suffix, '').replace(prefix, '').replaceAll(hongbao, '-');
+
+}
+
+// 口令加密
+export const encodePwd = (password) => {
+    return (prefix + password + suffix).replaceAll('-', hongbao);
 }

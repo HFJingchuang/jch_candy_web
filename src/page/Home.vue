@@ -3,7 +3,7 @@
  * @Author: gwang
  * @Date: 2020-11-03 14:14:53
  * @LastEditors: gwang
- * @LastEditTime: 2020-11-03 17:00:23
+ * @LastEditTime: 2020-11-03 17:33:28
 -->
 <template>
   <div class="home">
@@ -18,9 +18,7 @@
           <span style="display: inline-block; font-size: small; color: black"
             >成功发出红包总数：</span
           >
-          <span style="color: black"
-            >{{ this.candyCount }}
-          </span>
+          <span style="color: black">{{ this.candyCount }} </span>
           <svg class="icon" aria-hidden="true">
             <use xlink:href="#icon-hongbao"></use>
           </svg>
@@ -58,7 +56,12 @@
 
 <script>
 import { Notify } from "vant";
-import { distributionCandy, getPacketCount } from "../js/utils";
+import {
+  decodePwd,
+  encodePwd,
+  distributionCandy,
+  getPacketCount,
+} from "../js/utils";
 export default {
   name: "home",
   data: function () {
@@ -66,12 +69,16 @@ export default {
       message: "",
       candyCount: "" || "0",
       loading: false,
+      password: "",
     };
   },
   watch: {
     async message(newVal) {
-      if (newVal.length == 36) {
+      this.password = decodePwd(newVal);
+      if (this.password.length == 36) {
         await this.getCandy();
+      } else {
+        Notify({ type: "danger", message: "无效的红包口令" });
       }
     },
   },
@@ -80,23 +87,18 @@ export default {
   },
   methods: {
     async getCandy() {
-      if (this.message) {
-        this.loading = true;
-        let wallet = await tp.getCurrentWallet();
-        let address = wallet.data.address;
-        // let address = "jKBCwv4EcyvYtD4PafP17PLpnnZ16szQsC";
-        let res = await distributionCandy(address, this.message);
-        if (res.status == 0) {
-          Notify({
-            type: "success",
-            message:
-              "抢红包成功，抢到了" + res.data.amount + " " + res.data.coinType,
-          });
-        } else {
-          Notify({ type: "danger", message: res.msg });
-        }
+      this.loading = true;
+      let wallet = await tp.getCurrentWallet();
+      let address = wallet.data.address;
+      let res = await distributionCandy(address, this.password);
+      if (res.status == 0) {
+        Notify({
+          type: "success",
+          message:
+            "抢红包成功，抢到了" + res.data.amount + " " + res.data.coinType,
+        });
       } else {
-        Notify({ type: "danger", message: "请输入红包口令" });
+        Notify({ type: "danger", message: res.msg });
       }
       this.loading = false;
     },
