@@ -213,7 +213,7 @@ async function getJingtumNode() {
  * @param  unixtime 1603959642445
  */
 export const formatTime = (unixtime) => {
-    let unixTimestamp = new Date(unixtime);
+    let unixTimestamp = new Date(unixtime.replace(/-/g, '/'));
     let Y = unixTimestamp.getFullYear();
     let M =
         unixTimestamp.getMonth() + 1 >= 10
