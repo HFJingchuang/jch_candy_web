@@ -1,8 +1,8 @@
 const tp = require('tp-js-sdk');
 const axios = require('axios');
 axios.create({ headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' } });
-const BigNumber = require("bignumber.js");
-let serverUrl = process.env.NODE_ENV == 'serve' ? '/serve' : process.env.VUE_APP_SERVE_URL;
+axios.defaults.baseURL = process.env.VUE_APP_BASE_URL;
+const serverUrl = "jchRedPacket";
 
 
 /**

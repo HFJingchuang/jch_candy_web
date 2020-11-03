@@ -1,10 +1,3 @@
-/*
- * @Description: 
- * @Author: zcZhang
- * @Date: 2020-10-28 09:53:49
- * @LastEditors: zcZhang
- * @LastEditTime: 2020-10-29 18:33:23
- */
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 

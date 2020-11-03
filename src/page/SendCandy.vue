@@ -36,7 +36,7 @@
       </van-popup>
       <van-field
         v-model="candyAmount"
-        name="金额"
+        name="validatorAmount"
         :label="amountLabel"
         type="number"
         placeholder="请输入红包金额"
@@ -47,11 +47,12 @@
             pattern: /(^[0-9]{1,9}$)|(^[0-9]{1,9}[.]{1}[0-9]{1,2}$)/,
             message: '红包金额暂只支持两位小数',
           },
+          { validator: validatorAmount, message: amountErrMsg },
         ]"
       />
       <van-field
         v-model="candyNum"
-        name="红包个数"
+        name="validatorNum"
         label="红包个数"
         @blur="computeAmount"
         type="digit"
@@ -60,10 +61,7 @@
           {
             required: true,
           },
-          {
-            pattern: /^([1-9]|[1-9]\\d|100)$/,
-            message: '红包数量在1-100之间',
-          },
+          { validator: validatorNum, message: numErrMsg },
         ]"
       />
       <van-field
@@ -122,6 +120,8 @@ export default {
       candyRemark: "",
       submitAmount: "塞钱",
       showOverlay: false,
+      amountErrMsg: "",
+      numErrMsg: "",
     };
   },
   created() {
@@ -144,12 +144,10 @@ export default {
         this.totalAmount,
         this.candyRemark
       );
-      console.log(res.result && res.data)
       if (res.result && res.data) {
         this.showOverlay = true;
         // 发送交易
         let sendRes = await sendRawTransaction(res.data);
-        console.log(sendRes)
         if (sendRes.result) {
           let createRes = await createCandy(
             this.candyType,
@@ -196,12 +194,45 @@ export default {
           "塞钱" + "  " + this.totalAmount + " " + this.coinType;
       }
     },
+    // 验证金额
+    validatorAmount(amount) {
+      if (parseFloat(amount) <= 0) {
+        this.amountErrMsg = "红包金额不可为0";
+        return false;
+      }
+      if (this.candyType == 1 && this.candyNum != "") {
+        var tmp = new BigNumber(amount).dividedBy(this.candyNum).toString();
+        if (parseFloat(tmp) < 0.01) {
+          this.amountErrMsg = "单个红包金额最小为0.01";
+          return false;
+        }
+        return true;
+      }
+    },
+    validatorNum(num) {
+      if (this.candyType == 0) {
+        if (parseInt(num) < 1 || parseInt(num) > 100) {
+          this.numErrMsg = "普通红包份额在1-100之间";
+          return false;
+        }
+        return true;
+      } else {
+        if (parseInt(num) < 2 || parseInt(num) > 100) {
+          this.numErrMsg = "运气红包份额在2-100之间";
+          return false;
+        }
+        return true;
+      }
+    },
     changeCoinType() {
+      this.amountErrMsg = "";
+      this.numErrMsg = "";
       if (this.candyType == 0) {
         this.amountLabel = "单个金额";
       } else {
         this.amountLabel = "总金额";
       }
+      this.computeAmount();
     },
   },
 };
