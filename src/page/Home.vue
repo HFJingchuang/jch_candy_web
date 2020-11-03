@@ -8,8 +8,11 @@
           v-model="message"
         ></textarea>
       </div>
-      <button class="distribution-candy-button" @click="getCandy">
-        抢红包
+      <button class="distribution-candy-button">
+        <van-loading v-if="loading" type="spinner" size="12px"
+          >抢红包中</van-loading
+        >
+        <span v-show="!loading">抢红包</span>
       </button>
     </div>
     <div class="home-center">
@@ -44,7 +47,15 @@ export default {
     return {
       message: "",
       candyCount: "",
+      loading: false,
     };
+  },
+  watch: {
+    async message(newVal) {
+      if (newVal.length == 36) {
+        await this.getCandy();
+      }
+    },
   },
   mounted() {
     this.getCandyCount();
@@ -52,9 +63,10 @@ export default {
   methods: {
     async getCandy() {
       if (this.message) {
+        this.loading = true;
         let wallet = await tp.getCurrentWallet();
         let address = wallet.data.address;
-      // let address = "jKBCwv4EcyvYtD4PafP17PLpnnZ16szQsC";
+        // let address = "jKBCwv4EcyvYtD4PafP17PLpnnZ16szQsC";
         let res = await distributionCandy(address, this.message);
         if (res.status == 0) {
           Notify({
@@ -68,6 +80,7 @@ export default {
       } else {
         Notify({ type: "danger", message: "请输入红包口令" });
       }
+      this.loading = false;
     },
     async getCandyCount() {
       let res = await getPacketCount();
