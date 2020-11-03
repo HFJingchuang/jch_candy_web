@@ -291,3 +291,49 @@ a {
 .about-us-content a {
     color: blue;
 }
+
+.van-notify--danger {
+    transition-duration: 0.2s !important;
+    top: 80% !important;
+    width: 40% !important;
+    position: fixed !important;
+    z-index: 2000 !important;
+    left: 50% !important;
+    transition: all .5s !important;
+    -webkit-transform: translateX(-50%) translateY(-50%) !important;
+    -moz-transform: translateX(-50%) translateY(-50%) !important;
+    -ms-transform: translateX(-50%) translateY(-50%) !important;
+    -o-transform: translateX(-50%) translateY(-50%) !important;
+    transform: translateX(-50%) translateY(-50%) !important;
+    text-align: center !important;
+    border-radius: 5px !important;
+    color: red !important;
+    background: rgba(255, 255, 255, 1) !important;
+    height: 45px !important;
+    line-height: 45px !important;
+    padding: 0 15px !important;
+    max-width: 150px !important;
+}
+
+.van-notify--success {
+    transition-duration: 0.2s !important;
+    top: 80% !important;
+    width: 40% !important;
+    position: fixed !important;
+    z-index: 2000 !important;
+    left: 50% !important;
+    transition: all .5s !important;
+    -webkit-transform: translateX(-50%) translateY(-50%) !important;
+    -moz-transform: translateX(-50%) translateY(-50%) !important;
+    -ms-transform: translateX(-50%) translateY(-50%) !important;
+    -o-transform: translateX(-50%) translateY(-50%) !important;
+    transform: translateX(-50%) translateY(-50%) !important;
+    text-align: center !important;
+    border-radius: 5px !important;
+    color: black !important;
+    background: rgba(255, 255, 255, 1) !important;
+    height: 45px !important;
+    line-height: 45px !important;
+    padding: 0 15px !important;
+    max-width: 150px !important;
+}
