@@ -3,7 +3,7 @@
  * @Author: gwang
  * @Date: 2020-11-03 14:14:53
  * @LastEditors: gwang
- * @LastEditTime: 2020-11-03 16:10:52
+ * @LastEditTime: 2020-11-03 17:00:23
 -->
 <template>
   <div class="home">
@@ -11,27 +11,30 @@
       <img class="home-top-bg" src="../assets/images/homeTop.png" />
       <div class="candy-code">
         <textarea
-          placeholder="请输入红包口令领取红包"
+          placeholder="输入红包口令 即刻领取红包"
           v-model="message"
         ></textarea>
+        <div>
+          <span style="display: inline-block; font-size: small; color: black"
+            >成功发出红包总数：</span
+          >
+          <span style="color: black"
+            >{{ this.candyCount }}
+          </span>
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#icon-hongbao"></use>
+          </svg>
+        </div>
       </div>
-      <button class="distribution-candy-button">
+
+      <!-- <button class="distribution-candy-button">
         <van-loading v-if="loading" type="spinner" size="12px"
           >抢红包中</van-loading
         >
         <span v-show="!loading">抢红包</span>
-      </button>
+      </button> -->
     </div>
     <div class="home-center">
-      <div>
-        <span style="display: inline-block; font-size: small; color: white"
-          >成功发出红包总数：</span
-        >
-        <span style="font-weight: bold">{{ this.candyCount }} </span>
-        <svg class="icon" aria-hidden="true">
-          <use xlink:href="#icon-hongbao"></use>
-        </svg>
-      </div>
       <div class="send-candy" @click="goSendCandyPage">
         <span>发红包</span>
       </div>
