@@ -3,7 +3,7 @@
  * @Author: gwang
  * @Date: 2020-11-03 14:14:53
  * @LastEditors: gwang
- * @LastEditTime: 2020-11-03 17:33:28
+ * @LastEditTime: 2020-11-03 19:31:46
 -->
 <template>
   <div class="home">
@@ -74,7 +74,7 @@ export default {
   },
   watch: {
     async message(newVal) {
-      this.password = decodePwd(newVal);
+      if (newVal.length >= 45) this.password = decodePwd(newVal);
       if (this.password.length == 36) {
         await this.getCandy();
       } else {

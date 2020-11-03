@@ -136,13 +136,16 @@ export const getTransactionStatus = async (hash) => {
  */
 export const createCandy = async (candyType, candyNumber, createHash) => {
     // 判断hash是否上链
-    while (true) {
+    var i = 20;
+    while (i > 0) {
         let res = await getTransactionStatus(createHash);
         if (res) {
             break;
         }
-        await new Promise(resolve => setTimeout(resolve, 100))
+        i--;
+        await new Promise(resolve => setTimeout(resolve, 500))
     }
+    if (i == 0) return { status: 404, msg: '转账失败，请重试' }
     let data = {
         type: parseInt(candyType),
         num: parseInt(candyNumber),
@@ -258,11 +261,11 @@ function convertStringToHex(in_str) {
 }
 // 口令解密
 export const decodePwd = (password) => {
-    return password.replace(suffix, '').replace(prefix, '').replaceAll(hongbao, '-');
+    return password.replace(suffix, '').replace(prefix, '').replace(new RegExp(hongbao, 'g'), '-');
 
 }
 
 // 口令加密
 export const encodePwd = (password) => {
-    return (prefix + password + suffix).replaceAll('-', hongbao);
+    return (prefix + password + suffix).replace(new RegExp('-', 'g'), hongbao);
 }

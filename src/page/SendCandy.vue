@@ -86,10 +86,25 @@
       </div>
     </van-form>
     <van-overlay :show="showOverlay">
+      <!-- <div
+        class="display: flex; display: -webkit-flex; -webkit-align-items: center; -webkit-justify-content: center; height: 100%;"
+      > -->
       <div class="overlay-div">
-        <van-loading type="spinner" size="80px" color="#fff" />
-        <div class="overlay-text">红包创建中……</div>
+        <div
+          style="
+            width: 120px;
+            height: 120px;
+            background-color: #fff;
+            box-shadow: 0px 1px 1px grey;
+            border-radius: 10px;
+          "
+        >
+          <van-loading type="spinner" size="60px" color="grey" vertical="true"
+            >红包创建中...</van-loading
+          >
+        </div>
       </div>
+      <!-- </div> -->
     </van-overlay>
   </div>
 </template>
@@ -124,7 +139,7 @@ export default {
       candyNum: "",
       candyRemark: "",
       submitAmount: "塞钱",
-      showOverlay: false,
+      showOverlay: true,
       amountErrMsg: "",
       numErrMsg: "",
     };
@@ -178,6 +193,11 @@ export default {
           } else {
             Notify({ type: "danger", message: createRes.msg });
           }
+        } else {
+          Notify({
+            type: "danger",
+            message: "交易失败，请重试！",
+          });
         }
       }
     },

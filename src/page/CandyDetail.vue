@@ -22,6 +22,15 @@
           ></Clipboard
         ></van-col>
       </v-row>
+      <van-cell
+        class="detail-text"
+        v-if="detail.remark !== '00' && detail.remark"
+      >
+        <v-row>
+          <van-col style="color:white"> 备注：</van-col>
+          <van-col> {{ decodMemo(detail.remark) }} </van-col>
+        </v-row>
+      </van-cell>
       <van-cell class="detail-text">
         <v-row>
           <van-col>
@@ -141,6 +150,9 @@ export default {
     },
     formatHash(hash) {
       return formatTextOverflow(hash);
+    },
+    decodMemo(memo) {
+      return Buffer.from(memo, "hex").toString();
     },
   },
 };

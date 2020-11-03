@@ -26,7 +26,10 @@ export default {
         },
       });
       this.clipboard.on("success", function (e) {
-        Notify({ type: "success", message: "复制成功" });
+        Notify({
+          type: "success",
+          message: "复制成功",
+        });
         e.clearSelection();
       });
       this.clipboard.on("error", function (e) {

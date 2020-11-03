@@ -179,8 +179,11 @@ a {
     color: white;
     display: flex;
     align-items: center;
+    /* background-color: #dedede; */
     justify-content: center;
     height: 100%;
+    /* width: 120px; */
+    /* height: 120px; */
 }
 
 .send-candy .overlay-text {
@@ -294,8 +297,8 @@ a {
 
 .van-notify--danger {
     transition-duration: 0.2s !important;
-    top: 80% !important;
-    width: 40% !important;
+    top: 5% !important;
+    width: auto;
     position: fixed !important;
     z-index: 2000 !important;
     left: 50% !important;
@@ -309,7 +312,7 @@ a {
     border-radius: 5px !important;
     color: red !important;
     background: rgba(255, 255, 255, 1) !important;
-    height: 45px !important;
+    /* height: 45px !important; */
     line-height: 45px !important;
     padding: 0 15px !important;
     max-width: 150px !important;
@@ -317,8 +320,8 @@ a {
 
 .van-notify--success {
     transition-duration: 0.2s !important;
-    top: 80% !important;
-    width: 40% !important;
+    top: 5% !important;
+    width: auto;
     position: fixed !important;
     z-index: 2000 !important;
     left: 50% !important;
@@ -330,9 +333,9 @@ a {
     transform: translateX(-50%) translateY(-50%) !important;
     text-align: center !important;
     border-radius: 5px !important;
-    color: black !important;
-    background: rgba(255, 255, 255, 1) !important;
-    height: 45px !important;
+    color: white !important;
+    background: rgb(17, 17, 17,0.7) !important;
+    /* height: 45px !important; */
     line-height: 45px !important;
     padding: 0 15px !important;
     max-width: 150px !important;
@@ -344,4 +347,8 @@ a {
     vertical-align: -0.15em;
     fill: currentColor;
     overflow: hidden;
+}
+
+.van-overlay {
+    background-color: rgba(0, 0, 0, 0)!important;
 }

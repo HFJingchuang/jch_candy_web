@@ -3,7 +3,7 @@
  * @Author: gwang
  * @Date: 2020-11-03 14:14:53
  * @LastEditors: gwang
- * @LastEditTime: 2020-11-03 17:33:40
+ * @LastEditTime: 2020-11-03 18:39:22
  */
 import Vue from 'vue'
 import App from './App.vue'
@@ -14,7 +14,7 @@ import 'vant/lib/index.css';
 import VueClipboard from 'vue-clipboard2'
 
 Vue.config.productionTip = false
-// Vue.prototype.$vConsole = new vConsole()
+Vue.prototype.$vConsole = new vConsole()
 
 Vue.use(Vant);
 Vue.use(VueClipboard)

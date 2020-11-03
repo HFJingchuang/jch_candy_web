@@ -21,14 +21,20 @@
             :title="item"
             class="record-list"
           >
-            <div @click="goCandyDetail(item['packet.id'])">
-              <van-col span="6">
+            <div>
+              <van-col span="6" @click="goCandyDetail(item['packet.id'])">
                 <div class="cell-title-start list-left">
                   {{ formatAt(item.updatedAt) }}
                 </div>
               </van-col>
-              <van-col span="8">{{ formatHash(item.hash) }}</van-col>
-              <van-col span="6"
+              <van-col span="8"
+                >{{ formatHash(item.hash) }}
+                <Clipboard
+                  ref="clipboard"
+                  @click.native="copyTextToClipboard(item.hash)"
+                ></Clipboard>
+              </van-col>
+              <van-col span="6" @click="goCandyDetail(item['packet.id'])"
                 ><div>
                   {{ item.amount }}&nbsp;&nbsp;{{ item.coin_type }}
                 </div></van-col
@@ -51,9 +57,10 @@
       <van-tab title="我发的">
         <van-cell v-show="sendList.length != 0">
           <van-row>
-            <van-col class="cell-title-start" span="8">创建时间</van-col>
-            <van-col class="cell-title" span="8">转账hash</van-col>
-            <van-col class="cell-title-end" span="8">红包金额</van-col>
+            <van-col class="cell-title-start" span="6">创建时间</van-col>
+            <van-col class="cell-title" span="7">口令</van-col>
+            <van-col class="cell-title" span="7">哈希</van-col>
+            <van-col class="cell-title-end" span="4">金额</van-col>
           </van-row>
         </van-cell>
         <van-cell v-show="sendList.length == 0">
@@ -65,15 +72,29 @@
             :key="item"
             :title="item"
             class="record-list"
-            @click="goCandyDetail(item.id)"
           >
-            <van-col span="8">
+            <van-col span="6" @click="goCandyDetail(item.id)">
               <div class="cell-title-start list-left">
                 {{ formatAt(item.createdAt) }}
               </div>
             </van-col>
-            <van-col span="8">{{ formatHash(item.hash) }}</van-col>
-            <van-col span="8"
+            <van-col span="7">
+              <div class="cell-title-start list-left">
+                {{ formatHash(item.id) }}
+                <Clipboard
+                  ref="id"
+                  @click.native="copyIdToClipboard(item.id)"
+                ></Clipboard>
+              </div>
+            </van-col>
+            <van-col span="7"
+              >{{ formatHash(item.hash) }}
+              <Clipboard
+                ref="clipboard"
+                @click.native="copyTextToClipboard(item.hash)"
+              ></Clipboard>
+            </van-col>
+            <van-col span="4" @click="goCandyDetail(item.id)"
               ><div class="cell-title-end list-right">
                 {{ item.amount }}&nbsp;&nbsp;{{ item.coin_type }}
               </div></van-col
@@ -87,6 +108,7 @@
 
 <script>
 import NavBar from "../components/NavBar";
+import Clipboard from "../components/CopyToClipboard";
 import { Notify } from "vant";
 import {
   getSendCandyList,
@@ -95,11 +117,13 @@ import {
   formatTextOverflow,
   getTransactionStatus,
   makeUpCandy,
+  encodePwd,
 } from "../js/utils";
 export default {
   name: "candyRecord",
   components: {
     NavBar,
+    Clipboard,
   },
   data: function () {
     return {
@@ -161,6 +185,12 @@ export default {
           this.getList[i].isFail = true;
         }
       }
+    },
+    copyTextToClipboard(text) {
+      this.$refs.clipboard[0].copyToClipboard(text);
+    },
+    copyIdToClipboard(text) {
+      this.$refs.id[0].copyToClipboard(encodePwd(text));
     },
     goCandyDetail(id) {
       this.$router.push({
