@@ -1,3 +1,10 @@
+<!--
+ * @Description: 
+ * @Author: gwang
+ * @Date: 2020-11-03 14:14:53
+ * @LastEditors: gwang
+ * @LastEditTime: 2020-11-03 14:40:15
+-->
 <template>
   <div class="about-us">
     <!-- 头部导航栏 -->
@@ -5,10 +12,10 @@
     <!-- 关于我们 -->
     <div class="about-us-content">
       <p>{{ content }}</p>
-      联系我们：
+      <br>
       <p>官网：{{ this.url }}</p>
-      <!-- <p>QQ群： {{ this.qqGroup }}</p>
-      <p>QQ：{{ this.qq }}</p> -->
+      <p>QQ群： {{ this.qqGroup }}</p>
+      <!-- <p>QQ：{{ this.qq }}</p>  -->
     </div>
   </div>
 </template>
@@ -22,7 +29,7 @@ export default {
     NavBar,
   },
   data: function () {
-    return { content: "", qq: "", wechat: "", url: "", qqGroup: "" };
+    return { content: "", qq: "", wechat: "", url: "", qqGroup: "472131306" };
   },
   created() {
     this.content = config.content;
