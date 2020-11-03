@@ -27,11 +27,11 @@ module.exports = {
         hotOnly: true,
         // 使用代理
         proxy: {
-            '/jchRedPacket': {
+            '/api': {
                 target: process.env.VUE_APP_SERVE_URL,
                 changeOrigin: true,
                 pathRewrite: {
-                    '^/jchRedPacket': '/'
+                    '^/api': '/'
                 }
             },
             '/node0': {

@@ -2,7 +2,7 @@ const tp = require('tp-js-sdk');
 const axios = require('axios');
 axios.create({ headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' } });
 axios.defaults.baseURL = process.env.VUE_APP_BASE_URL;
-const serverUrl = "jchRedPacket";
+const serverUrl = "/api";
 
 
 /**
