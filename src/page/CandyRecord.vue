@@ -143,7 +143,6 @@ export default {
     async getLoad() {
       let wallet = await tp.getCurrentWallet();
       let address = wallet.data.address;
-      // let address = "jKBCwv4EcyvYtD4PafP17PLpnnZ16szQsC";
       let res = await getObtainCandyList(address);
       if (res.status == 0) {
         this.getList = res.data.list;
@@ -157,7 +156,6 @@ export default {
     async sendLoad() {
       let wallet = await tp.getCurrentWallet();
       let address = wallet.data.address;
-      // let address = "jKBCwv4EcyvYtD4PafP17PLpnnZ16szQsC";
       let res = await getSendCandyList(address);
       if (res.status == 0) {
         this.sendList = res.data.list;

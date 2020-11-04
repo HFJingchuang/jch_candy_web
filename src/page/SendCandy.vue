@@ -148,7 +148,6 @@ export default {
     async sendCandy() {
       let wallet = await tp.getCurrentWallet();
       let address = wallet.data.address;
-      // let address = "jKBCwv4EcyvYtD4PafP17PLpnnZ16szQsC";
       // 签名
       let res = await signTransaction(
         address,

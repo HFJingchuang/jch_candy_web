@@ -262,6 +262,11 @@ a {
     color: beige !important;
 }
 
+.detail-divider {
+    padding: 0 5px !important;
+    margin: 10px 0 !important;
+}
+
 .detail-text .van-cell__value--alone {
     color: beige !important;
 }

@@ -14,11 +14,11 @@
       </v-row>
       <v-row>
         <van-col span="24">{{ statusMsg }}</van-col>
-        <van-col span="24" v-if="refundHash"
-          >{{ formatHash(refundHash) }}
+        <van-col span="24" v-if="detail.refundHash"
+          >{{ formatHash(detail.refundHash) }}
           <Clipboard
             ref="refundHash"
-            @click.native="copyRefundHash(refundHash)"
+            @click.native="copyRefundHash(detail.refundHash)"
           ></Clipboard
         ></van-col>
       </v-row>
@@ -59,29 +59,32 @@
         :title="item"
         class="list-item"
       >
-        <van-col span="8">
-          <div class="cell-title-start list-left">
-            {{ formatAt(item.updatedAt) }}
-          </div>
-        </van-col>
-        <van-col span="8">
-          {{ formatHash(item.hash) }}
-          <Clipboard
-            ref="clipboard"
-            @click.native="copyTextToClipboard(item.hash)"
-          ></Clipboard>
-        </van-col>
-        <van-col span="8"
-          ><div class="cell-title-end list-right">
-            {{ item.amount }}&nbsp;&nbsp;{{ detail.coinType }}
-          </div>
-          <div
-            v-if="index == 0 && detail.candyType == 1 && detail.remainder == 0"
-            class="best-luck"
+        <van-row>
+          <van-col span="8">
+            <div class="cell-title-start list-left">
+              {{ formatAt(item.updatedAt) }}
+            </div>
+          </van-col>
+          <van-col span="8">
+            {{ formatHash(item.hash) }}
+            <Clipboard
+              ref="clipboard"
+              @click.native="copyTextToClipboard(item.hash)"
+            ></Clipboard>
+          </van-col>
+          <van-col span="8"
+            ><div class="cell-title-end list-right">
+              {{ item.amount }}&nbsp;&nbsp;{{ detail.coinType }}
+            </div>
+            <div
+              v-if="index == 0 && detail.type == 1 && detail.remainder == 0"
+              class="best-luck"
+            >
+              手气最佳
+            </div></van-col
           >
-            手气最佳
-          </div></van-col
-        >
+        </van-row>
+        <van-divider class="detail-divider" />
       </div>
     </div>
   </div>
@@ -92,6 +95,7 @@ import NavBar from "../components/NavBar";
 import Clipboard from "../components/CopyToClipboard";
 import { Notify } from "vant";
 import { getCandyDetail, formatTime, formatTextOverflow } from "../js/utils";
+var sortBy = require("lodash.sortby");
 const BigNumber = require("bignumber.js");
 export default {
   name: "candyDetail",
@@ -117,7 +121,6 @@ export default {
     async getCandyDetailById() {
       let wallet = await tp.getCurrentWallet();
       let address = wallet.data.address;
-      // let address = "jKBCwv4EcyvYtD4PafP17PLpnnZ16szQsC";
       let res = await getCandyDetail(this.id);
       if (res.status == 0) {
         this.detail = res.data.packet;
@@ -127,7 +130,7 @@ export default {
             this.detail.remainder
           );
           if (this.detail.remainder == 0) {
-            if (this.detail.is_refund == 1) {
+            if (this.detail.isRefund == 1) {
               // 退款
               this.statusMsg =
                 "已退款，退款金额：" +
@@ -140,6 +143,11 @@ export default {
           } else {
             this.statusMsg = "进行中";
           }
+        }
+        if (this.detail.type == 1) {
+          this.list = sortBy(this.list, function (o) {
+            return parseFloat("-" + o.amount);
+          });
         }
         this.list.forEach((e) => {
           if (e.beneficiary == address) {
