@@ -27,7 +27,7 @@
         v-if="detail.remark !== '00' && detail.remark"
       >
         <v-row>
-          <van-col style="color:white"> 备注：</van-col>
+          <van-col style="color: white"> 备注：</van-col>
           <van-col> {{ decodMemo(detail.remark) }} </van-col>
         </v-row>
       </van-cell>
@@ -53,7 +53,12 @@
       <van-cell v-show="list.length == 0">
         <van-col class="cell-title" span="24">暂无数据</van-col>
       </van-cell>
-      <div v-for="item in list" :key="item" :title="item" class="list-item">
+      <div
+        v-for="(item, index) in list"
+        :key="item"
+        :title="item"
+        class="list-item"
+      >
         <van-col span="8">
           <div class="cell-title-start list-left">
             {{ formatAt(item.updatedAt) }}
@@ -69,6 +74,12 @@
         <van-col span="8"
           ><div class="cell-title-end list-right">
             {{ item.amount }}&nbsp;&nbsp;{{ detail.coinType }}
+          </div>
+          <div
+            v-if="index == 0 && detail.candyType == 1 && detail.remainder == 0"
+            class="best-luck"
+          >
+            手气最佳
           </div></van-col
         >
       </div>

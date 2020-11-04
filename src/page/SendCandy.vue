@@ -85,27 +85,20 @@
         </van-button>
       </div>
     </van-form>
-    <van-overlay :show="showOverlay">
-      <!-- <div
-        class="display: flex; display: -webkit-flex; -webkit-align-items: center; -webkit-justify-content: center; height: 100%;"
-      > -->
+    <van-dialog
+      v-model="showOverlay"
+      :width="200"
+      :show-confirm-button="false"
+      class="loading-dialog"
+    >
       <div class="overlay-div">
-        <div
-          style="
-            width: 120px;
-            height: 120px;
-            background-color: #fff;
-            box-shadow: 0px 1px 1px grey;
-            border-radius: 10px;
-          "
+        <van-loading type="spinner" size="60px" color="white" vertical="true"
+          ><span style="color: #fff !important"
+            >红包创建中...</span
+          ></van-loading
         >
-          <van-loading type="spinner" size="60px" color="grey" vertical="true"
-            >红包创建中...</van-loading
-          >
-        </div>
       </div>
-      <!-- </div> -->
-    </van-overlay>
+    </van-dialog>
   </div>
 </template>
 

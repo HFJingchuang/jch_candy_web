@@ -2,8 +2,8 @@
  * @Description: 
  * @Author: gwang
  * @Date: 2020-11-03 14:14:53
- * @LastEditors: gwang
- * @LastEditTime: 2020-11-03 19:31:46
+ * @LastEditors: zcZhang
+ * @LastEditTime: 2020-11-04 11:14:31
 -->
 <template>
   <div class="home">
@@ -56,12 +56,7 @@
 
 <script>
 import { Notify } from "vant";
-import {
-  decodePwd,
-  encodePwd,
-  distributionCandy,
-  getPacketCount,
-} from "../js/utils";
+import { decodePwd, distributionCandy, getPacketCount } from "../js/utils";
 export default {
   name: "home",
   data: function () {
@@ -74,11 +69,13 @@ export default {
   },
   watch: {
     async message(newVal) {
-      if (newVal.length >= 45) this.password = decodePwd(newVal);
-      if (this.password.length == 36) {
-        await this.getCandy();
-      } else {
-        Notify({ type: "danger", message: "无效的红包口令" });
+      if (newVal.length >= 36) {
+        this.password = decodePwd(newVal);
+        if (this.password.length == 36) {
+          await this.getCandy();
+        } else {
+          Notify({ type: "danger", message: "无效的红包口令" });
+        }
       }
     },
   },
@@ -96,6 +93,13 @@ export default {
           type: "success",
           message:
             "抢红包成功，抢到了" + res.data.amount + " " + res.data.coinType,
+        });
+        // 跳转详情
+        this.$router.push({
+          path: "candyDetail",
+          query: {
+            candyId: res.data.candyId,
+          },
         });
       } else {
         Notify({ type: "danger", message: res.msg });

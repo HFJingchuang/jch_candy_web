@@ -179,11 +179,13 @@ a {
     color: white;
     display: flex;
     align-items: center;
-    /* background-color: #dedede; */
     justify-content: center;
     height: 100%;
-    /* width: 120px; */
-    /* height: 120px; */
+    margin: 15px;
+}
+
+.send-candy .loading-dialog {
+    background-color: rgba(17, 17, 17, 0.7);
 }
 
 .send-candy .overlay-text {
@@ -236,6 +238,14 @@ a {
     padding: 0;
     margin: 0;
     font-size: 1rem;
+}
+
+.candy-detail .best-luck {
+    line-height: 0px;
+    text-align: end;
+    font-size: 12px;
+    transform: scale(0.9);
+    color: darkorange;
 }
 
 .detail-div {
@@ -297,48 +307,36 @@ a {
 
 .van-notify--danger {
     transition-duration: 0.2s !important;
-    top: 5% !important;
-    width: auto;
+    top: 1% !important;
+    width: 50% !important;
     position: fixed !important;
     z-index: 2000 !important;
-    left: 50% !important;
+    left: 25% !important;
     transition: all .5s !important;
-    -webkit-transform: translateX(-50%) translateY(-50%) !important;
-    -moz-transform: translateX(-50%) translateY(-50%) !important;
-    -ms-transform: translateX(-50%) translateY(-50%) !important;
-    -o-transform: translateX(-50%) translateY(-50%) !important;
-    transform: translateX(-50%) translateY(-50%) !important;
     text-align: center !important;
     border-radius: 5px !important;
     color: red !important;
     background: rgba(255, 255, 255, 1) !important;
-    /* height: 45px !important; */
     line-height: 45px !important;
     padding: 0 15px !important;
-    max-width: 150px !important;
+    max-width: 50% !important;
 }
 
 .van-notify--success {
     transition-duration: 0.2s !important;
-    top: 5% !important;
-    width: auto;
+    top: 1% !important;
+    width: 50% !important;
     position: fixed !important;
     z-index: 2000 !important;
-    left: 50% !important;
+    left: 25% !important;
     transition: all .5s !important;
-    -webkit-transform: translateX(-50%) translateY(-50%) !important;
-    -moz-transform: translateX(-50%) translateY(-50%) !important;
-    -ms-transform: translateX(-50%) translateY(-50%) !important;
-    -o-transform: translateX(-50%) translateY(-50%) !important;
-    transform: translateX(-50%) translateY(-50%) !important;
     text-align: center !important;
     border-radius: 5px !important;
     color: white !important;
-    background: rgb(17, 17, 17,0.7) !important;
-    /* height: 45px !important; */
+    background: rgb(17, 17, 17, 0.7) !important;
     line-height: 45px !important;
     padding: 0 15px !important;
-    max-width: 150px !important;
+    max-width: 50% !important;
 }
 
 .icon {
