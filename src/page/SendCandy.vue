@@ -139,7 +139,7 @@ export default {
       candyNum: "",
       candyRemark: "",
       submitAmount: "塞钱",
-      showOverlay: true,
+      showOverlay: false,
       amountErrMsg: "",
       numErrMsg: "",
     };
