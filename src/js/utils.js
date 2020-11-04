@@ -123,6 +123,33 @@ export const getTransactionStatus = async (hash) => {
     }
 }
 
+export const isTransferError = async (hash) => {
+    try {
+        let random = Math.floor(Math.random() * 5);
+        let data = {
+            "method": "tx",
+            "params": [
+                {
+                    "transaction": hash,
+                    "binary": false
+                }
+            ]
+        };
+        let url = "/node" + random;
+        let res = await axios.post(url, data);
+        if (res.data.result.meta) {
+            let status = res.data.result.meta.TransactionResult;
+            if (status != "tesSUCCESS") {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    } catch (error) {
+        return false;
+    }
+}
+
 /**
  * 创建红包
  * @param candyType 红包类型

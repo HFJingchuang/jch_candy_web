@@ -3,7 +3,7 @@
  * @Author: gwang
  * @Date: 2020-11-03 14:14:53
  * @LastEditors: zcZhang
- * @LastEditTime: 2020-11-04 11:14:31
+ * @LastEditTime: 2020-11-04 16:04:02
 -->
 <template>
   <div class="home">
@@ -91,8 +91,7 @@ export default {
       if (res.status == 0) {
         Notify({
           type: "success",
-          message:
-            "抢红包成功，抢到了" + res.data.amount + " " + res.data.coinType,
+          message: "抢到了" + res.data.amount + " " + res.data.coinType,
         });
         // 跳转详情
         this.$router.push({

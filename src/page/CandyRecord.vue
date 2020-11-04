@@ -13,33 +13,32 @@
           </van-row>
         </van-cell>
         <van-cell v-show="getList.length == 0">
-          <van-col class="cell-title" span="24">暂无数据</van-col> </van-cell
-        ><van-list @load="getLoad">
-          <v-row
-            v-for="item in getList"
-            :key="item"
-            :title="item"
-            class="record-list"
-          >
-            <div>
-              <van-col span="6" @click="goCandyDetail(item['packet.id'])">
-                <div class="cell-title-start list-left">
-                  {{ formatAt(item.updatedAt) }}
-                </div>
-              </van-col>
-              <van-col span="8"
-                >{{ formatHash(item.hash) }}
-                <Clipboard
-                  ref="clipboard"
-                  @click.native="copyTextToClipboard(item.hash)"
-                ></Clipboard>
-              </van-col>
-              <van-col span="6" @click="goCandyDetail(item['packet.id'])"
-                ><div>
-                  {{ item.amount }}&nbsp;&nbsp;{{ item.coin_type }}
-                </div></van-col
-              >
-            </div>
+          <van-col class="cell-title" span="24">暂无数据</van-col>
+        </van-cell>
+        <div
+          v-for="item in getList"
+          :key="item"
+          :title="item"
+          class="record-list"
+        >
+          <van-row>
+            <van-col span="6" @click="goCandyDetail(item['packet.id'])">
+              <div class="cell-title-start list-left">
+                {{ formatAt(item.updatedAt) }}
+              </div>
+            </van-col>
+            <van-col span="8"
+              >{{ formatHash(item.hash) }}
+              <Clipboard
+                ref="clipboard"
+                @click.native="copyTextToClipboard(item.hash)"
+              ></Clipboard>
+            </van-col>
+            <van-col span="6" @click="goCandyDetail(item['packet.id'])"
+              ><div>
+                {{ item.amount }}&nbsp;&nbsp;{{ item.coin_type }}
+              </div></van-col
+            >
             <van-col span="4" class="cell-title-end"
               ><div class="list-right">
                 <div
@@ -51,9 +50,10 @@
                 </div>
               </div></van-col
             >
-          </v-row>
-        </van-list></van-tab
-      >
+          </van-row>
+          <van-divider class="record-divider" />
+        </div>
+      </van-tab>
       <van-tab title="我发的">
         <van-cell v-show="sendList.length != 0">
           <van-row>
@@ -66,13 +66,13 @@
         <van-cell v-show="sendList.length == 0">
           <van-col class="cell-title" span="24">暂无数据</van-col>
         </van-cell>
-        <van-list @load="sendLoad">
-          <div
-            v-for="item in sendList"
-            :key="item"
-            :title="item"
-            class="record-list"
-          >
+        <div
+          v-for="item in sendList"
+          :key="item"
+          :title="item"
+          class="record-list"
+        >
+          <van-row>
             <van-col span="6" @click="goCandyDetail(item.id)">
               <div class="cell-title-start list-left">
                 {{ formatAt(item.createdAt) }}
@@ -99,8 +99,9 @@
                 {{ item.amount }}&nbsp;&nbsp;{{ item.coin_type }}
               </div></van-col
             >
-          </div>
-        </van-list>
+          </van-row>
+          <van-divider class="record-divider" />
+        </div>
       </van-tab>
     </van-tabs>
   </div>
@@ -115,7 +116,7 @@ import {
   getObtainCandyList,
   formatTime,
   formatTextOverflow,
-  getTransactionStatus,
+  isTransferError,
   makeUpCandy,
   encodePwd,
 } from "../js/utils";
@@ -178,9 +179,11 @@ export default {
     // 判断红包是否转账成功
     async getCandyStatus() {
       for (let i = 0, len = this.getList.length; i < len; i++) {
-        let status = await getTransactionStatus(this.getList[i].hash);
-        if (!status) {
+        let status = await isTransferError(this.getList[i].hash);
+        if (status) {
           this.getList[i].isFail = true;
+        } else {
+          this.getList[i].isFail = false;
         }
       }
     },

@@ -192,9 +192,20 @@ a {
     margin-left: 5px;
 }
 
+.send-candy .send-tips {
+    font-size: 12px;
+    text-align: start;
+    margin-left: 5px;
+}
+
 .candy-record {
     padding: 0;
     margin: 0;
+}
+
+.candy-record .record-divider {
+    padding: 0 16px !important;
+    margin: 10px 0 !important;
 }
 
 .cell-title {
@@ -225,6 +236,10 @@ a {
     text-align: center;
     font-size: 14px;
     line-height: 35px;
+}
+
+.candy-status-text {
+    font-size: 14px;
 }
 
 .record-list .appeal-button {
@@ -263,8 +278,8 @@ a {
 }
 
 .detail-divider {
-    padding: 0 5px !important;
-    margin: 10px 0 !important;
+    padding: 0 16px !important;
+    margin: 5px 0 !important;
 }
 
 .detail-text .van-cell__value--alone {
@@ -321,9 +336,9 @@ a {
     text-align: center !important;
     border-radius: 5px !important;
     color: red !important;
-    background: rgba(255, 255, 255, 1) !important;
-    line-height: 45px !important;
-    padding: 0 15px !important;
+    background: rgb(17, 17, 17, 0.7) !important;
+    line-height: 25px !important;
+    padding: 5 15px !important;
     max-width: 50% !important;
 }
 
@@ -339,8 +354,8 @@ a {
     border-radius: 5px !important;
     color: white !important;
     background: rgb(17, 17, 17, 0.7) !important;
-    line-height: 45px !important;
-    padding: 0 15px !important;
+    line-height: 25px !important;
+    padding: 5px 15px !important;
     max-width: 50% !important;
 }
 
@@ -352,6 +367,7 @@ a {
     overflow: hidden;
 }
 
-.van-overlay {
-    background-color: rgba(0, 0, 0, 0)!important;
+p {
+    margin: 5px 5px;
+    padding: 0;
 }

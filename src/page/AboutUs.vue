@@ -2,8 +2,8 @@
  * @Description: 
  * @Author: gwang
  * @Date: 2020-11-03 14:14:53
- * @LastEditors: gwang
- * @LastEditTime: 2020-11-03 14:40:15
+ * @LastEditors: zcZhang
+ * @LastEditTime: 2020-11-04 15:22:47
 -->
 <template>
   <div class="about-us">
@@ -12,9 +12,10 @@
     <!-- 关于我们 -->
     <div class="about-us-content">
       <p>{{ content }}</p>
-      <br>
+      <br />
       <p>官网：{{ this.url }}</p>
       <p>QQ群： {{ this.qqGroup }}</p>
+
       <!-- <p>QQ：{{ this.qq }}</p>  -->
     </div>
   </div>

@@ -12,7 +12,7 @@
           {{ detail.coinType }}
         </van-col>
       </v-row>
-      <v-row>
+      <v-row class="candy-status-text">
         <van-col span="24">{{ statusMsg }}</van-col>
         <van-col span="24" v-if="detail.refundHash"
           >{{ formatHash(detail.refundHash) }}
@@ -80,6 +80,7 @@
               v-if="index == 0 && detail.type == 1 && detail.remainder == 0"
               class="best-luck"
             >
+              <van-icon name="award" color="#darkorange" />
               手气最佳
             </div></van-col
           >
@@ -138,7 +139,7 @@ export default {
                 " " +
                 this.detail.coinType;
             } else {
-              this.statusMsg = "已完成";
+              this.statusMsg = "已抢完";
             }
           } else {
             this.statusMsg = "进行中";

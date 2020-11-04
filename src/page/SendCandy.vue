@@ -85,11 +85,22 @@
         </van-button>
       </div>
     </van-form>
+    <div class="send-tips">
+      <p>
+        <van-icon name="info-o" color="red" size="14" />
+        48小时内未抢完的红包将会退还到发起账户。
+      </p>
+      <p>
+        <van-icon name="info-o" color="red" size="14" />
+        红包口令可在红包记录-我发的 页面，点击复制分享。
+      </p>
+    </div>
     <van-dialog
       v-model="showOverlay"
       :width="200"
       :show-confirm-button="false"
       class="loading-dialog"
+      :overlay="false"
     >
       <div class="overlay-div">
         <van-loading type="spinner" size="60px" color="white" vertical="true"
