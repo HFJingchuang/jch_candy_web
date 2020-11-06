@@ -3,7 +3,7 @@
  * @Author: gwang
  * @Date: 2020-11-03 14:14:53
  * @LastEditors: zcZhang
- * @LastEditTime: 2020-11-04 16:04:02
+ * @LastEditTime: 2020-11-06 11:32:35
 -->
 <template>
   <div class="home">
@@ -56,7 +56,12 @@
 
 <script>
 import { Notify } from "vant";
-import { decodePwd, distributionCandy, getPacketCount } from "../js/utils";
+import {
+  decodePwd,
+  distributionCandy,
+  getAddressBalance,
+  getPacketCount,
+} from "../js/utils";
 export default {
   name: "home",
   data: function () {
@@ -64,6 +69,7 @@ export default {
       message: "",
       candyCount: "" || "0",
       loading: false,
+      address: "",
       password: "",
     };
   },
@@ -80,35 +86,51 @@ export default {
     },
   },
   mounted() {
+    this.getAddress();
     this.getCandyCount();
   },
   methods: {
-    async getCandy() {
-      this.loading = true;
+    async getAddress() {
       let wallet = await tp.getCurrentWallet();
-      let address = wallet.data.address;
-      let res = await distributionCandy(address, this.password);
-      if (res.status == 0) {
-        Notify({
-          type: "success",
-          message: "抢到了" + res.data.amount + " " + res.data.coinType,
-        });
-        // 跳转详情
-        this.$router.push({
-          path: "candyDetail",
-          query: {
-            candyId: res.data.candyId,
-          },
-        });
+      this.address = wallet.data.address;
+    },
+    async getCandy() {
+      let status = await this.getAddressStatus();
+      if (status) {
+        this.loading = true;
+        let res = await distributionCandy(this.address, this.password);
+        if (res.status == 0) {
+          Notify({
+            type: "success",
+            message: "抢到了" + res.data.amount + " " + res.data.coinType,
+          });
+          // 跳转详情
+          this.$router.push({
+            path: "candyDetail",
+            query: {
+              candyId: res.data.candyId,
+            },
+          });
+        } else {
+          Notify({ type: "danger", message: res.msg });
+        }
+        this.loading = false;
       } else {
-        Notify({ type: "danger", message: res.msg });
+        Notify({ type: "danger", message: "该钱包未激活" });
       }
-      this.loading = false;
     },
     async getCandyCount() {
       let res = await getPacketCount();
       if (res.status == 0) {
         this.candyCount = res.data;
+      }
+    },
+    async getAddressStatus() {
+      let res = await getAddressBalance(this.address);
+      if (res.code == "2004" || res.msg == "该地址未激活") {
+        return false;
+      } else {
+        return true;
       }
     },
     goSendCandyPage() {

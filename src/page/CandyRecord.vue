@@ -3,13 +3,13 @@
     <!-- 头部导航栏 -->
     <NavBar title="红包记录" backUrl="/home"></NavBar>
     <!-- 红包记录Tab -->
-    <van-tabs v-model="active">
-      <van-tab title="我抢的">
+    <van-tabs v-model="active" @click="onClickTabs">
+      <van-tab name="get" title="我抢的">
         <van-cell v-show="getList.length != 0">
           <van-row>
-            <van-col class="cell-title-start" span="6">获取时间</van-col>
-            <van-col class="cell-title" span="8">转账hash</van-col>
-            <van-col class="cell-title" span="6">红包金额</van-col>
+            <van-col class="cell-title-start" span="7">获取时间</van-col>
+            <van-col class="cell-title" span="6">哈希</van-col>
+            <van-col class="cell-title" span="7">金额</van-col>
           </van-row>
         </van-cell>
         <van-cell v-show="getList.length == 0">
@@ -22,19 +22,19 @@
           class="record-list"
         >
           <van-row>
-            <van-col span="6" @click="goCandyDetail(item['packet.id'])">
+            <van-col span="7" @click="goCandyDetail(item['packet.id'])">
               <div class="cell-title-start list-left">
                 {{ formatAt(item.updatedAt) }}
               </div>
             </van-col>
-            <van-col span="8"
+            <van-col span="6"
               >{{ formatHash(item.hash) }}
               <Clipboard
                 ref="clipboard"
                 @click.native="copyTextToClipboard(item.hash)"
               ></Clipboard>
             </van-col>
-            <van-col span="6" @click="goCandyDetail(item['packet.id'])"
+            <van-col span="7" @click="goCandyDetail(item['packet.id'])"
               ><div>
                 {{ item.amount }}&nbsp;&nbsp;{{ item.coin_type }}
               </div></van-col
@@ -54,13 +54,13 @@
           <van-divider class="record-divider" />
         </div>
       </van-tab>
-      <van-tab title="我发的">
+      <van-tab name="send" title="我发的">
         <van-cell v-show="sendList.length != 0">
           <van-row>
             <van-col class="cell-title-start" span="6">创建时间</van-col>
-            <van-col class="cell-title" span="7">口令</van-col>
-            <van-col class="cell-title" span="7">哈希</van-col>
-            <van-col class="cell-title-end" span="4">金额</van-col>
+            <van-col class="cell-title" span="5">口令</van-col>
+            <van-col class="cell-title" span="5">哈希</van-col>
+            <van-col class="cell-title-end" span="8">金额</van-col>
           </van-row>
         </van-cell>
         <van-cell v-show="sendList.length == 0">
@@ -78,23 +78,21 @@
                 {{ formatAt(item.createdAt) }}
               </div>
             </van-col>
-            <van-col span="7">
-              <div class="cell-title-start list-left">
-                {{ formatHash(item.id) }}
-                <Clipboard
-                  ref="id"
-                  @click.native="copyIdToClipboard(item.id)"
-                ></Clipboard>
-              </div>
+            <van-col span="5">
+              {{ formatHash(item.id) }}
+              <Clipboard
+                ref="id"
+                @click.native="copyIdToClipboard(item.id)"
+              ></Clipboard>
             </van-col>
-            <van-col span="7"
+            <van-col span="5"
               >{{ formatHash(item.hash) }}
               <Clipboard
                 ref="clipboard"
                 @click.native="copyTextToClipboard(item.hash)"
               ></Clipboard>
             </van-col>
-            <van-col span="4" @click="goCandyDetail(item.id)"
+            <van-col span="8" @click="goCandyDetail(item.id)"
               ><div class="cell-title-end list-right">
                 {{ item.amount }}&nbsp;&nbsp;{{ item.coin_type }}
               </div></van-col
@@ -185,6 +183,13 @@ export default {
         } else {
           this.getList[i].isFail = false;
         }
+      }
+    },
+    async onClickTabs(name, title) {
+      if (name == "get") {
+        await this.getLoad();
+      } else {
+        await this.sendLoad();
       }
     },
     copyTextToClipboard(text) {

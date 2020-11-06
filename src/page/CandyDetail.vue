@@ -45,8 +45,9 @@
     <div class="list-div">
       <van-cell v-show="list.length != 0">
         <van-row>
-          <van-col class="cell-title-start" span="8">时间</van-col>
-          <van-col class="cell-title" span="8">转账hash</van-col>
+          <van-col class="cell-title-start" span="6">时间</van-col>
+          <van-col class="cell-title" span="5">地址</van-col>
+          <van-col class="cell-title" span="5">哈希</van-col>
           <van-col class="cell-title-end" span="8">金额</van-col>
         </van-row>
       </van-cell>
@@ -60,12 +61,19 @@
         class="list-item"
       >
         <van-row>
-          <van-col span="8">
+          <van-col span="6">
             <div class="cell-title-start list-left">
               {{ formatAt(item.updatedAt) }}
             </div>
           </van-col>
-          <van-col span="8">
+          <van-col span="5">
+            {{ formatHash(item.beneficiary) }}
+            <Clipboard
+              ref="clipboard"
+              @click.native="copyTextToClipboard(item.beneficiary)"
+            ></Clipboard>
+          </van-col>
+          <van-col span="5">
             {{ formatHash(item.hash) }}
             <Clipboard
               ref="clipboard"

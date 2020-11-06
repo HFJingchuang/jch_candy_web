@@ -34,6 +34,9 @@
           @cancel="showCoinTypePicker = false"
         />
       </van-popup>
+      <div class="current-balance" v-if="currentBalance !== ''">
+        可用：{{ currentBalance }} &nbsp;{{ coinType }}
+      </div>
       <van-field
         v-model="candyAmount"
         name="validatorAmount"
@@ -123,6 +126,7 @@ import {
   sendRawTransaction,
   createCandy,
   encodePwd,
+  getAddressBalance,
 } from "../js/utils";
 export default {
   name: "sendCandy",
@@ -131,6 +135,8 @@ export default {
   },
   data: function () {
     return {
+      currentBalance: "",
+      addressBalances: {},
       coinTypeNameList: [],
       coinTypeIssuerList: [],
       showCoinTypePicker: false,
@@ -154,6 +160,9 @@ export default {
       this.coinTypeIssuerList.push(e.issuer);
     });
     this.coinType = this.coinTypeNameList[0];
+  },
+  mounted() {
+    this.getBalace();
   },
   methods: {
     async sendCandy() {
@@ -194,9 +203,11 @@ export default {
               );
             });
           } else {
+            this.showOverlay = false;
             Notify({ type: "danger", message: createRes.msg });
           }
         } else {
+          this.showOverlay = false;
           Notify({
             type: "danger",
             message: "交易失败，请重试！",
@@ -204,9 +215,41 @@ export default {
         }
       }
     },
+    async getBalace() {
+      let wallet = await tp.getCurrentWallet();
+      let address = wallet.data.address;
+      let res = await getAddressBalance(address);
+      if (res.code == 0 && res.data) {
+        this.addressBalances = res.data;
+        this.currentBalance = this.formatBalance(
+          new BigNumber(this.addressBalances["SWTC"].value)
+            .minus(this.addressBalances["SWTC"].frozen)
+            .toString()
+        );
+      } else {
+        this.currentBalance = 0;
+      }
+    },
     confirmCoinType(value, index) {
       this.coinType = value;
       this.coinIssuer = this.coinTypeIssuerList[index];
+      if (this.addressBalances != {}) {
+        if (this.coinType == "SWT") {
+          this.currentBalance = this.formatBalance(
+            new BigNumber(this.addressBalances["SWTC"].value)
+              .minus(this.addressBalances["SWTC"].frozen)
+              .toString()
+          );
+        } else {
+          let name = this.coinType + "_jGa9J9TkqtBcUoHe2zqhVFFbgUVED6o9or";
+          this.currentBalance = this.formatBalance(
+            new BigNumber(this.addressBalances[name].value)
+              .minus(this.addressBalances[name].frozen)
+              .toString()
+          );
+        }
+      }
+
       this.showCoinTypePicker = false;
     },
     computeAmount() {
@@ -226,6 +269,10 @@ export default {
     validatorAmount(amount) {
       if (parseFloat(amount) <= 0) {
         this.amountErrMsg = "红包金额不可为0";
+        return false;
+      }
+      if (parseFloat(amount) > parseFloat(this.currentBalance)) {
+        this.amountErrMsg = "红包金额不可大于可用余额";
         return false;
       }
       if (this.candyType == 1 && this.candyNum != "") {
@@ -261,6 +308,14 @@ export default {
         this.amountLabel = "总金额";
       }
       this.computeAmount();
+    },
+    formatBalance(num) {
+      let data = num.toString();
+      let index = data.toString().indexOf(".");
+      if (index > 0) {
+        return data.slice(0, index + 3);
+      }
+      return data;
     },
   },
 };

@@ -112,6 +112,7 @@ export const getTransactionStatus = async (hash) => {
         let res = await axios.post(url, data);
         if (res.data.result.meta) {
             let status = res.data.result.meta.TransactionResult;
+            console.log("获取交易状态", res.data.result.meta.TransactionResult)
             if (status == "tesSUCCESS") {
                 return true;
             }
@@ -148,6 +149,16 @@ export const isTransferError = async (hash) => {
     } catch (error) {
         return false;
     }
+}
+
+/**
+ * 获取钱包余额
+ * @param {String} address 
+ */
+export const getAddressBalance = async (address) => {
+    let url = "/scan/wallet/balance/ " + new Date().getTime() + "?w=" + address;
+    let res = await axios.get(url);
+    return res.data;
 }
 
 /**
@@ -271,7 +282,7 @@ export const formatTime = (unixtime) => {
 // 文字溢出处理
 export const formatTextOverflow = (text) => {
     if (text.length > 8) {
-        text = text.slice(0, 4) + "…" + text.slice(-4)
+        text = text.slice(0, 4) + "…";
     }
     return text;
 }
