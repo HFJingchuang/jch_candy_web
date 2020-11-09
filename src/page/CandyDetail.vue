@@ -138,19 +138,19 @@ export default {
           this.getNum = new BigNumber(this.detail.num).minus(
             this.detail.remainder
           );
-          if (this.detail.remainder == 0) {
-            if (this.detail.isRefund == 1) {
-              // 退款
-              this.statusMsg =
-                "已退款，退款金额：" +
-                this.detail.refund +
-                " " +
-                this.detail.coinType;
-            } else {
-              this.statusMsg = "已抢完";
-            }
+          if (this.detail.isRefund == 1) {
+            // 退款
+            this.statusMsg =
+              "已退款，退款金额：" +
+              this.detail.refund +
+              " " +
+              this.detail.coinType;
           } else {
-            this.statusMsg = "进行中";
+            if (this.detail.remainder == 0) {
+              this.statusMsg = "已抢完";
+            } else {
+              this.statusMsg = "进行中";
+            }
           }
         }
         if (this.detail.type == 1) {

@@ -167,73 +167,89 @@ export default {
   methods: {
     async sendCandy() {
       let wallet = await tp.getCurrentWallet();
+      let chain = wallet.data.blockchain;
       let address = wallet.data.address;
-      // 签名
-      let res = await signTransaction(
-        address,
-        this.coinType,
-        this.coinIssuer,
-        this.totalAmount,
-        this.candyRemark
-      );
-      if (res.result && res.data) {
-        this.showOverlay = true;
-        // 发送交易
-        let sendRes = await sendRawTransaction(res.data);
-        if (sendRes.result) {
-          let createRes = await createCandy(
-            this.candyType,
-            this.candyNum,
-            sendRes.txHash
-          );
-          this.showOverlay = false;
-          if (createRes.status == 0) {
-            let candyId = encodePwd(createRes.data.id);
-            Dialog.alert({
-              title: "红包创建成功",
-              message: "红包口令：" + candyId,
-            }).then(() => {
-              this.$copyText(candyId).then(
-                () => {
-                  Notify({ type: "success", message: "复制成功" });
-                },
-                () => {
-                  Notify({ type: "danger", message: "复制失败" });
-                }
-              );
-            });
+      if (chain == "jingtum") {
+        // 签名
+        let res = await signTransaction(
+          address,
+          this.coinType,
+          this.coinIssuer,
+          this.totalAmount,
+          this.candyRemark
+        );
+        if (res.result && res.data) {
+          this.showOverlay = true;
+          // 发送交易
+          let sendRes = await sendRawTransaction(res.data);
+          if (sendRes.result) {
+            let createRes = await createCandy(
+              this.candyType,
+              this.candyNum,
+              sendRes.txHash
+            );
+            this.showOverlay = false;
+            if (createRes.status == 0) {
+              let candyId = encodePwd(createRes.data.id);
+              Dialog.alert({
+                title: "红包创建成功",
+                message: "红包口令：" + candyId,
+              }).then(() => {
+                this.$copyText(candyId).then(
+                  () => {
+                    Notify({ type: "success", message: "复制成功" });
+                  },
+                  () => {
+                    Notify({ type: "danger", message: "复制失败" });
+                  }
+                );
+              });
+            } else {
+              this.showOverlay = false;
+              Notify({ type: "danger", message: createRes.msg });
+            }
           } else {
             this.showOverlay = false;
-            Notify({ type: "danger", message: createRes.msg });
+            Notify({
+              type: "danger",
+              message: "交易失败，请重试！",
+            });
           }
-        } else {
-          this.showOverlay = false;
-          Notify({
-            type: "danger",
-            message: "交易失败，请重试！",
-          });
         }
+      } else {
+        Notify({
+          type: "danger",
+          message: "请切换到井通钱包",
+        });
       }
     },
     async getBalace() {
       let wallet = await tp.getCurrentWallet();
       let address = wallet.data.address;
-      let res = await getAddressBalance(address);
-      if (res.code == 0 && res.data) {
-        this.addressBalances = res.data;
-        this.currentBalance = this.formatBalance(
-          new BigNumber(this.addressBalances["SWTC"].value)
-            .minus(this.addressBalances["SWTC"].frozen)
-            .toString()
-        );
+      let chain = wallet.data.blockchain;
+      if (chain == "jingtum") {
+        let res = await getAddressBalance(address);
+        if (res.code == 0 && res.data) {
+          this.addressBalances = res.data;
+          this.currentBalance = this.formatBalance(
+            new BigNumber(this.addressBalances["SWTC"].value)
+              .minus(this.addressBalances["SWTC"].frozen)
+              .toString()
+          );
+        } else {
+          this.currentBalance = 0;
+        }
       } else {
-        this.currentBalance = 0;
+        Notify({
+          type: "danger",
+          message: "请切换到井通钱包",
+        });
       }
     },
     confirmCoinType(value, index) {
       this.coinType = value;
       this.coinIssuer = this.coinTypeIssuerList[index];
-      if (this.addressBalances != {}) {
+      if (this.addressBalances["SWTC"]) {
         if (this.coinType == "SWT") {
           this.currentBalance = this.formatBalance(
             new BigNumber(this.addressBalances["SWTC"].value)

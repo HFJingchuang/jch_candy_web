@@ -3,7 +3,7 @@
  * @Author: gwang
  * @Date: 2020-11-03 14:14:53
  * @LastEditors: zcZhang
- * @LastEditTime: 2020-11-06 11:32:35
+ * @LastEditTime: 2020-11-09 09:53:46
 -->
 <template>
   <div class="home">
@@ -70,6 +70,7 @@ export default {
       candyCount: "" || "0",
       loading: false,
       address: "",
+      chain: "",
       password: "",
     };
   },
@@ -85,16 +86,21 @@ export default {
       }
     },
   },
-  mounted() {
+  created() {
     this.getAddress();
     this.getCandyCount();
   },
   methods: {
     async getAddress() {
       let wallet = await tp.getCurrentWallet();
+      this.chain = wallet.data.blockchain;
       this.address = wallet.data.address;
     },
     async getCandy() {
+      if (this.chain != "jingtum") {
+        Notify({ type: "danger", message: "请切换到井通钱包" });
+        return;
+      }
       let status = await this.getAddressStatus();
       if (status) {
         this.loading = true;
