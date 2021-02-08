@@ -3,7 +3,7 @@
     <!-- 头部导航栏 -->
     <NavBar title="发红包" backUrl="/home"></NavBar>
     <!-- 抢红包表单 -->
-    <van-form @submit="sendCandy">
+    <van-form @submit="sendCandy" class="send-candy-form">
       <van-field name="checkboxGroup" label="红包类型">
         <template #input>
           <van-radio-group
@@ -17,15 +17,17 @@
         </template>
       </van-field>
       <van-field
+        class="field-icon"
         readonly
         clickable
         name="picker"
         :value="coinType"
         label="币种"
         placeholder="点击选择币种"
+        right-icon="arrow-down"
         @click="showCoinTypePicker = true"
       />
-      <van-popup v-model="showCoinTypePicker" position="bottom">
+      <van-popup round v-model="showCoinTypePicker" position="bottom">
         <van-picker
           ref="picker"
           show-toolbar
@@ -34,11 +36,12 @@
           @cancel="showCoinTypePicker = false"
         />
       </van-popup>
-      <div class="current-balance" v-if="currentBalance !== ''">
+      <div class="current-balance" v-show="currentBalance !== ''">
         可用：{{ currentBalance }} &nbsp;{{ coinType }}
       </div>
       <van-field
         v-model="candyAmount"
+        required
         name="validatorAmount"
         :label="amountLabel"
         type="number"
@@ -48,32 +51,34 @@
           { required: true },
           {
             pattern: /(^[0-9]{1,9}$)|(^[0-9]{1,9}[.]{1}[0-9]{1,2}$)/,
-            message: '红包金额暂只支持两位小数',
+            message: '红包金额暂只支持两位小数'
           },
-          { validator: validatorAmount, message: amountErrMsg },
+          { validator: validatorAmount, message: amountErrMsg }
         ]"
       />
       <van-field
         v-model="candyNum"
         name="validatorNum"
+        required
         label="红包个数"
         @blur="computeAmount"
         type="digit"
         placeholder="请输入红包个数"
         :rules="[
           {
-            required: true,
+            required: true
           },
-          { validator: validatorNum, message: numErrMsg },
+          { validator: validatorNum, message: numErrMsg }
         ]"
       />
       <van-field
         v-model="candyRemark"
+        class="remark-textarea"
         rows="2"
         autosize
         type="textarea"
         maxlength="50"
-        placeholder="请输入红包备注"
+        placeholder="恭喜发财，大吉大利"
         show-word-limit
       />
       <div style="margin: 16px">
@@ -126,12 +131,12 @@ import {
   sendRawTransaction,
   createCandy,
   encodePwd,
-  getAddressBalance,
+  getAddressBalance
 } from "../js/utils";
 export default {
   name: "sendCandy",
   components: {
-    NavBar,
+    NavBar
   },
   data: function () {
     return {
@@ -151,7 +156,7 @@ export default {
       submitAmount: "塞钱",
       showOverlay: false,
       amountErrMsg: "",
-      numErrMsg: "",
+      numErrMsg: ""
     };
   },
   created() {
@@ -168,13 +173,17 @@ export default {
     async sendCandy() {
       let wallet = await tp.getCurrentWallet();
       let address = wallet.data.address;
+      let remark = "恭喜发财，大吉大利";
+      if (this.candyRemark) {
+        remark = this.candyRemark;
+      }
       // 签名
       let res = await signTransaction(
         address,
         this.coinType,
         this.coinIssuer,
         this.totalAmount,
-        this.candyRemark
+        remark
       );
       if (res.result && res.data) {
         this.showOverlay = true;
@@ -191,7 +200,7 @@ export default {
             let candyId = encodePwd(createRes.data.id);
             Dialog.alert({
               title: "红包创建成功",
-              message: "红包口令：" + candyId,
+              message: "红包口令：" + candyId
             }).then(() => {
               this.$copyText(candyId).then(
                 () => {
@@ -210,7 +219,7 @@ export default {
           this.showOverlay = false;
           Notify({
             type: "danger",
-            message: "交易失败，请重试！",
+            message: "交易失败，请重试！"
           });
         }
       }
@@ -316,7 +325,7 @@ export default {
         return data.slice(0, index + 3);
       }
       return data;
-    },
-  },
+    }
+  }
 };
 </script>

@@ -299,8 +299,13 @@ function convertStringToHex(in_str) {
 }
 // 口令解密
 export const decodePwd = (password) => {
-    return password.replace(suffix, '').replace(prefix, '').replace(new RegExp(hongbao, 'g'), '-');
+    // 头部
+    var prefixIndex = password.indexOf(prefix);
+    // 尾部
+    var suffixIndex = password.indexOf(suffix);
+    password = password.slice(prefixIndex, suffixIndex)
 
+    return password.replace(suffix, '').replace(prefix, '').replace(new RegExp(hongbao, 'g'), '-').trim();
 }
 
 // 口令加密

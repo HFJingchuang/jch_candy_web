@@ -139,6 +139,19 @@ a {
     cursor: pointer;
 }
 
+.home .overlay-div {
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    margin: 15px;
+}
+
+.home .loading-dialog {
+    background-color: rgba(17, 17, 17, 0.4);
+}
+
 /* 子页面头部导航栏 */
 
 .nav-bar {
@@ -173,6 +186,18 @@ a {
 .send-candy {
     padding: 0;
     margin: 0;
+}
+
+.send-candy-form .van-field__label {
+    margin-left: 10px;
+}
+
+.send-candy .field-icon .van-field__right-icon {
+    margin-right: 10px;
+}
+
+.send-candy .remark-textarea .van-field__value {
+    padding-left: 10px;
 }
 
 .send-candy .overlay-div {

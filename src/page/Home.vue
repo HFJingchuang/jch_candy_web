@@ -51,6 +51,19 @@
         <span>Powered by 合肥井创数字科技有限公司</span>
       </div>
     </div>
+    <van-dialog
+      v-model="showOverlay"
+      :width="200"
+      :show-confirm-button="false"
+      class="loading-dialog"
+      :overlay="false"
+    >
+      <div class="overlay-div">
+        <van-loading size="60px" color="#fff7c1" vertical="true"
+          ><span style="color: #fff !important">抢红包中...</span></van-loading
+        >
+      </div>
+    </van-dialog>
   </div>
 </template>
 
@@ -60,7 +73,7 @@ import {
   decodePwd,
   distributionCandy,
   getAddressBalance,
-  getPacketCount,
+  getPacketCount
 } from "../js/utils";
 export default {
   name: "home",
@@ -71,6 +84,7 @@ export default {
       loading: false,
       address: "",
       password: "",
+      showOverlay: false
     };
   },
   watch: {
@@ -82,8 +96,10 @@ export default {
         } else {
           Notify({ type: "danger", message: "无效的红包口令" });
         }
+      } else {
+        Notify({ type: "danger", message: "无效的红包口令" });
       }
-    },
+    }
   },
   created() {
     this.getAddress();
@@ -97,21 +113,23 @@ export default {
     async getCandy() {
       let status = await this.getAddressStatus();
       if (status) {
-        this.loading = true;
+        this.showOverlay = true;
         let res = await distributionCandy(this.address, this.password);
         if (res.status == 0) {
+          this.showOverlay = false;
           Notify({
             type: "success",
-            message: "抢到了" + res.data.amount + " " + res.data.coinType,
+            message: "抢到了" + res.data.amount + " " + res.data.coinType
           });
           // 跳转详情
           this.$router.push({
             path: "candyDetail",
             query: {
-              candyId: res.data.candyId,
-            },
+              candyId: res.data.candyId
+            }
           });
         } else {
+          this.showOverlay = false;
           Notify({ type: "danger", message: res.msg });
         }
         this.loading = false;
@@ -133,9 +151,9 @@ export default {
     },
     goSendCandyPage() {
       this.$router.push({
-        path: "sendCandy",
+        path: "sendCandy"
       });
-    },
-  },
+    }
+  }
 };
 </script>

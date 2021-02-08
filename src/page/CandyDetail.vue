@@ -84,10 +84,7 @@
             ><div class="cell-title-end list-right">
               {{ item.amount }}&nbsp;&nbsp;{{ detail.coinType }}
             </div>
-            <div
-              v-if="index == 0 && detail.type == 1 && detail.remainder == 0"
-              class="best-luck"
-            >
+            <div v-if="index == 0 && detail.type == 1" class="best-luck">
               <van-icon name="award" color="#darkorange" />
               手气最佳
             </div></van-col
@@ -110,7 +107,7 @@ export default {
   name: "candyDetail",
   components: {
     NavBar,
-    Clipboard,
+    Clipboard
   },
   data: function () {
     return {
@@ -119,7 +116,7 @@ export default {
       list: [],
       getNum: 0,
       getAmount: 0,
-      statusMsg: "",
+      statusMsg: ""
     };
   },
   mounted() {
@@ -181,7 +178,7 @@ export default {
     },
     decodMemo(memo) {
       return Buffer.from(memo, "hex").toString();
-    },
-  },
+    }
+  }
 };
 </script>

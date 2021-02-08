@@ -116,13 +116,13 @@ import {
   formatTextOverflow,
   isTransferError,
   makeUpCandy,
-  encodePwd,
+  encodePwd
 } from "../js/utils";
 export default {
   name: "candyRecord",
   components: {
     NavBar,
-    Clipboard,
+    Clipboard
   },
   data: function () {
     return {
@@ -130,7 +130,7 @@ export default {
       getList: [],
       getCount: 0,
       sendList: [],
-      sendCount: 0,
+      sendCount: 0
     };
   },
   mounted() {
@@ -202,8 +202,8 @@ export default {
       this.$router.push({
         path: "candyDetail",
         query: {
-          candyId: id,
-        },
+          candyId: id
+        }
       });
     },
     formatAt(time) {
@@ -211,8 +211,8 @@ export default {
     },
     formatHash(hash) {
       return formatTextOverflow(hash);
-    },
-  },
+    }
+  }
 };
 </script>
 
