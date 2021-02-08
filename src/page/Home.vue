@@ -60,7 +60,7 @@
     >
       <div class="overlay-div">
         <van-loading size="60px" color="#fff7c1" vertical="true"
-          ><span style="color: #fff !important">抢红包中...</span></van-loading
+          ><span style="color: #fff !important">正在抢红包...</span></van-loading
         >
       </div>
     </van-dialog>

@@ -4,8 +4,8 @@ axios.create({ headers: { 'Content-Type': 'application/json', 'Accept': 'applica
 axios.defaults.baseURL = process.env.VUE_APP_BASE_URL;
 const serverUrl = "/api";
 const hongbao = "🧧"
-const prefix = "井创" + hongbao + " ";
-const suffix = " 👉TP"
+const prefix = "【井创SWTC红包DAPP】复制口令：" + hongbao + " ";
+const suffix = " 👉【TP】抢红包啦！"
 
 /**
  * tp签名
