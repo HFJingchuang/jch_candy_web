@@ -56,7 +56,7 @@ export const signTransaction = async (address, coinType, coinIssuer, candyAmount
  * @param {String} sign 签名内容
  */
 export const sendRawTransaction = async (sign) => {
-    let random = Math.floor(Math.random() * 5);
+    let random = Math.floor(Math.random() * 2);
     let data = {
         "method": "submit",
         "params": [
@@ -79,7 +79,7 @@ export const sendRawTransaction = async (sign) => {
  * @param {String} address 钱包地址
  */
 async function getNonce(address) {
-    let random = Math.floor(Math.random() * 5);
+    let random = Math.floor(Math.random() * 2);
     let data = {
         "method": "account_info",
         "params": [
@@ -98,7 +98,7 @@ async function getNonce(address) {
 // 查看交易状态
 export const getTransactionStatus = async (hash) => {
     try {
-        let random = Math.floor(Math.random() * 5);
+        let random = Math.floor(Math.random() * 2);
         let data = {
             "method": "tx",
             "params": [
@@ -126,7 +126,7 @@ export const getTransactionStatus = async (hash) => {
 
 export const isTransferError = async (hash) => {
     try {
-        let random = Math.floor(Math.random() * 5);
+        let random = Math.floor(Math.random() * 2);
         let data = {
             "method": "tx",
             "params": [
