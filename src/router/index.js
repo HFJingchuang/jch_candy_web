@@ -32,6 +32,11 @@ const routes = [
         name: 'CandyDetail',
         component: () => import('../page/CandyDetail'),
         meta: { title: '红包详情' }
+    },{
+        path: '/passwordTitle',
+        name: 'PasswordTitle',
+        component: () => import('../page/PasswordTitle'),
+        meta: { title: '口令标题' }
     }
 ]
 

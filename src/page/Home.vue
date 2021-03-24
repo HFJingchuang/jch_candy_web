@@ -2,8 +2,8 @@
  * @Description: 
  * @Author: gwang
  * @Date: 2020-11-03 14:14:53
- * @LastEditors: zcZhang
- * @LastEditTime: 2020-11-09 10:20:18
+ * @LastEditors: gwang
+ * @LastEditTime: 2021-03-18 09:37:24
 -->
 <template>
   <div class="home">
@@ -16,7 +16,7 @@
         ></textarea>
         <div>
           <span style="display: inline-block; font-size: small; color: black"
-            >成功发出红包总数：</span
+            >DAPP成功发出红包总数：</span
           >
           <span style="color: black">{{ this.candyCount }} </span>
           <svg class="icon" aria-hidden="true">
@@ -70,7 +70,7 @@
 <script>
 import { Notify } from "vant";
 import {
-  decodePwd,
+  decodeTitlePwd,
   distributionCandy,
   getAddressBalance,
   getPacketCount
@@ -84,13 +84,17 @@ export default {
       loading: false,
       address: "",
       password: "",
+      title: "",
       showOverlay: false
     };
   },
   watch: {
     async message(newVal) {
+      this.showOverlay = true;
       if (newVal.length >= 36) {
-        this.password = decodePwd(newVal);
+        let result = await decodeTitlePwd(newVal);
+        this.password = result.password;
+        this.title = result.title;
         if (this.password.length == 36) {
           await this.getCandy();
         } else {
@@ -99,6 +103,7 @@ export default {
       } else {
         Notify({ type: "danger", message: "无效的红包口令" });
       }
+      this.showOverlay = false;
     }
   },
   created() {
@@ -113,8 +118,7 @@ export default {
     async getCandy() {
       let status = await this.getAddressStatus();
       if (status) {
-        this.showOverlay = true;
-        let res = await distributionCandy(this.address, this.password);
+        let res = await distributionCandy(this.address, this.password, this.title);
         if (res.status == 0) {
           this.showOverlay = false;
           Notify({

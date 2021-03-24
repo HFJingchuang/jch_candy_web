@@ -16,6 +16,7 @@ body {
 #app {
     height: 100%;
     margin-top: 0 !important;
+    background-color: #fafafa;
 }
 
 /* 首页 */
@@ -100,6 +101,22 @@ body {
     left: 50%;
     transform: translateX(-50%);
 }
+.home-center .send-passwordCandy {
+    width: 126px;
+    height: 38px;
+    margin-top: 58px;
+    cursor: pointer;
+    line-height: 38px;
+    background-color: #fff7c1;
+    border: 0 none;
+    border-radius: 3rem;
+    font-size: 16px;
+    font-weight: 400;
+    color: #dd2436;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
 
 .home .home-bottom {
     position: absolute;
@@ -147,6 +164,20 @@ a {
     height: 100%;
     margin: 15px;
 }
+.passwordTitle .overlay-div {
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    margin: 15px;
+}
+.passwordTitle .loading-dialog {
+    background-color: rgba(17, 17, 17, 0.7);
+}
+.send-candy .van-button{
+    margin-right: -10px;
+}
 
 .home .loading-dialog {
     background-color: rgba(17, 17, 17, 0.4);
@@ -170,6 +201,7 @@ a {
     justify-content: space-between;
     align-items: center;
     padding: 0 1.25rem;
+    border-bottom: 0.1px solid #fafafa;
 }
 
 .nav-bar .back-icon {
@@ -178,9 +210,10 @@ a {
 
 .nav-bar .header-title {
     color: #fff;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     max-width: 60%;
     margin: 0 auto;
+    /* display: flex; */
 }
 
 .send-candy {
@@ -219,8 +252,19 @@ a {
 
 .send-candy .send-tips {
     font-size: 12px;
-    text-align: start;
     margin-left: 5px;
+}
+.send-candy .send-tips .tips-center  {
+    display: flex;
+    align-items: center;
+}
+.passwordTitle .send-tips {
+    font-size: 12px;
+    margin-left: 5px;
+}
+.passwordTitle .send-tips .tips-center  {
+    display: flex;
+    align-items: center;
 }
 
 .candy-record {
@@ -229,8 +273,7 @@ a {
 }
 
 .candy-record .record-divider {
-    padding: 0 16px !important;
-    margin: 10px 0 !important;
+    margin: 0 16px !important;
 }
 
 .cell-title {
@@ -260,11 +303,12 @@ a {
 .candy-record .record-list {
     text-align: center;
     font-size: 14px;
-    line-height: 35px;
+    line-height: 45px;
+    background-color: #fff;    
 }
 
 .candy-status-text {
-    font-size: 14px;
+    font-size: 8px;
 }
 
 .record-list .appeal-button {
@@ -296,6 +340,7 @@ a {
 
 .detail-text {
     background-color: #ce2344 !important;
+    padding: 4px 8px!important;
 }
 
 .detail-text .van-cell__value {
@@ -303,8 +348,7 @@ a {
 }
 
 .detail-divider {
-    padding: 0 16px !important;
-    margin: 5px 0 !important;
+    margin: 0 16px !important;
 }
 
 .detail-text .van-cell__value--alone {
@@ -327,6 +371,7 @@ a {
     line-height: 35px;
     text-align: center;
     font-size: 14px;
+    background-color: #fff;
 }
 
 .about-us {
@@ -400,6 +445,6 @@ p {
 .current-balance {
     font-size: 12px;
     text-align: start;
-    margin-left: 5px;
+    margin-left: 18px;
     color: coral;
 }

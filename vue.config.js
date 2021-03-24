@@ -41,42 +41,6 @@ module.exports = {
                     '^/scan': '/'
                 }
             },
-            '/node0': {
-                target: process.env.VUE_APP_NODE_URL0,
-                changeOrigin: true,
-                pathRewrite: {
-                    '^/node0': '/'
-                }
-            },
-            '/node1': {
-                target: process.env.VUE_APP_NODE_URL1,
-                changeOrigin: true,
-                pathRewrite: {
-                    '^/node1': '/'
-                }
-            },
-            '/node2': {
-                target: process.env.VUE_APP_NODE_URL2,
-                changeOrigin: true,
-                pathRewrite: {
-                    '^/node2': '/'
-                }
-            },
-            '/node3': {
-                target: process.env.VUE_APP_NODE_URL3,
-                changeOrigin: true,
-                pathRewrite: {
-                    '^/node3': '/'
-                }
-            },
-            '/node4': {
-                target: process.env.VUE_APP_NODE_URL4,
-                changeOrigin: true,
-                pathRewrite: {
-                    '^/node4': '/'
-                }
-            }
-
         },
     },
 

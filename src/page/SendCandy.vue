@@ -1,7 +1,15 @@
 <template>
   <div class="send-candy">
     <!-- 头部导航栏 -->
-    <NavBar title="发红包" backUrl="/home"></NavBar>
+    <!-- <NavBar title="发红包" backUrl="/home"></NavBar> -->
+    <div class="nav-bar">
+      <div class="header-div">
+        <div class="header-title">
+          <span style="margin-left: 64px">发送红包</span>
+        </div>
+        <van-button size="mini" to="passwordTitle" icon="setting-o" color="#ce2344">口令修改</van-button>
+      </div>
+    </div>
     <!-- 抢红包表单 -->
     <van-form @submit="sendCandy" class="send-candy-form">
       <van-field name="checkboxGroup" label="红包类型">
@@ -51,9 +59,9 @@
           { required: true },
           {
             pattern: /(^[0-9]{1,9}$)|(^[0-9]{1,9}[.]{1}[0-9]{1,2}$)/,
-            message: '红包金额暂只支持两位小数'
+            message: '红包金额暂只支持两位小数',
           },
-          { validator: validatorAmount, message: amountErrMsg }
+          { validator: validatorAmount, message: amountErrMsg },
         ]"
       />
       <van-field
@@ -66,9 +74,9 @@
         placeholder="请输入红包个数"
         :rules="[
           {
-            required: true
+            required: true,
           },
-          { validator: validatorNum, message: numErrMsg }
+          { validator: validatorNum, message: numErrMsg },
         ]"
       />
       <van-field
@@ -88,20 +96,21 @@
           block
           type="info"
           native-type="submit"
+          :disabled="clickOnce"
         >
           {{ submitAmount }}
         </van-button>
       </div>
     </van-form>
     <div class="send-tips">
-      <p>
+      <div class="tips-center">
         <van-icon name="info-o" color="red" size="14" />
-        48小时内未抢完的红包将会退还到发起账户。
-      </p>
-      <p>
+        <span style="font-size: 12px; margin-left:3px">48小时内未抢完的红包将会退还到发起账户。</span>
+      </div>
+      <div class="tips-center">
         <van-icon name="info-o" color="red" size="14" />
-        红包口令可在红包记录-我发的 页面，点击复制分享。
-      </p>
+        <span style="font-size: 12px; margin-left:3px">红包口令可在红包记录-我发的 页面，点击复制分享。</span>
+      </div>
     </div>
     <van-dialog
       v-model="showOverlay"
@@ -128,15 +137,15 @@ const coin = require("../../static/coin.json");
 const BigNumber = require("bignumber.js");
 import {
   signTransaction,
-  sendRawTransaction,
-  createCandy,
-  encodePwd,
-  getAddressBalance
+  encodePwdTitle,
+  getAddressBalance,
+  sendRawTransactionAndCreate,
+  getNonce
 } from "../js/utils";
 export default {
   name: "sendCandy",
   components: {
-    NavBar
+    NavBar,
   },
   data: function () {
     return {
@@ -156,7 +165,8 @@ export default {
       submitAmount: "塞钱",
       showOverlay: false,
       amountErrMsg: "",
-      numErrMsg: ""
+      numErrMsg: "",
+      clickOnce: false,
     };
   },
   created() {
@@ -171,11 +181,21 @@ export default {
   },
   methods: {
     async sendCandy() {
+      this.clickOnce = true;
+      this.showOverlay = true;
       let wallet = await tp.getCurrentWallet();
       let address = wallet.data.address;
       let remark = "恭喜发财，大吉大利";
       if (this.candyRemark) {
         remark = this.candyRemark;
+      }
+      // 获取nonce
+      let nonce = await getNonce(address);
+      if(nonce.status !== 0 ){
+        this.clickOnce = false;
+        this.showOverlay = false;
+        Notify({ type: "danger", message: nonce.msg }); 
+        return;
       }
       // 签名
       let res = await signTransaction(
@@ -183,46 +203,47 @@ export default {
         this.coinType,
         this.coinIssuer,
         this.totalAmount,
+        nonce.data,
         remark
       );
       if (res.result && res.data) {
-        this.showOverlay = true;
-        // 发送交易
-        let sendRes = await sendRawTransaction(res.data);
-        if (sendRes.result) {
-          let createRes = await createCandy(
-            this.candyType,
-            this.candyNum,
-            sendRes.txHash
-          );
-          this.showOverlay = false;
-          if (createRes.status == 0) {
-            let candyId = encodePwd(createRes.data.id);
-            Dialog.alert({
-              title: "红包创建成功",
-              message: "红包口令：" + candyId
-            }).then(() => {
-              this.$copyText(candyId).then(
-                () => {
-                  Notify({ type: "success", message: "复制成功" });
-                },
-                () => {
-                  Notify({ type: "danger", message: "复制失败" });
-                }
-              );
-            });
-          } else {
-            this.showOverlay = false;
-            Notify({ type: "danger", message: createRes.msg });
-          }
+        // 发送创建放到后端去做
+        let createRes = await sendRawTransactionAndCreate(
+          this.candyType,
+          this.candyNum,
+          res.data
+        );
+        this.showOverlay = false;
+        if (createRes.status === 0) {
+          let candyId = encodePwdTitle(createRes.data.id,createRes.data.title);
+          Dialog.alert({
+            title: "红包创建成功",
+            message: "红包口令：" + candyId,
+            confirmButtonText: "复制",
+          }).then(() => {
+            this.$copyText(candyId).then(
+              () => {
+                Notify({ type: "success", message: "复制成功" });
+              },
+              () => {
+                Notify({ type: "danger", message: "复制失败" });
+              }
+            );
+          });
         } else {
           this.showOverlay = false;
-          Notify({
-            type: "danger",
-            message: "交易失败，请重试！"
-          });
+          this.clickOnce = false;
+          Notify({ type: "danger", message: createRes.msg });
         }
+        // } else {
+        //   this.showOverlay = false;
+        //   Notify({
+        //     type: "danger",
+        //     message: "交易失败，请重试！"
+        //   });
+        // }
       }
+      this.clickOnce = false;
     },
     async getBalace() {
       let wallet = await tp.getCurrentWallet();
@@ -245,20 +266,25 @@ export default {
       if (this.addressBalances["SWTC"]) {
         if (this.coinType == "SWT") {
           this.currentBalance = this.formatBalance(
-            new BigNumber(this.addressBalances["SWTC"].value)
-              .minus(this.addressBalances["SWTC"].frozen)
+            new BigNumber(this.addressBalances.SWTC.value)
+              .minus(this.addressBalances.SWTC.frozen)
               .toString()
           );
         } else {
           let name = this.coinType + "_jGa9J9TkqtBcUoHe2zqhVFFbgUVED6o9or";
-          this.currentBalance = this.formatBalance(
-            new BigNumber(this.addressBalances[name].value)
-              .minus(this.addressBalances[name].frozen)
-              .toString()
-          );
+          if (this.addressBalances["name"]) {
+            this.currentBalance = this.formatBalance(
+              new BigNumber(this.addressBalances[name].value)
+                .minus(this.addressBalances[name].frozen)
+                .toString()
+            );
+          } else {
+            this.currentBalance = this.formatBalance(
+              new BigNumber(0).minus(0).toString()
+            );
+          }
         }
       }
-
       this.showCoinTypePicker = false;
     },
     computeAmount() {
@@ -325,7 +351,7 @@ export default {
         return data.slice(0, index + 3);
       }
       return data;
-    }
-  }
+    },
+  },
 };
 </script>

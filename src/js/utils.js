@@ -1,10 +1,9 @@
 const tp = require('tp-js-sdk');
 const axios = require('axios');
 axios.create({ headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' } });
-axios.defaults.baseURL = process.env.VUE_APP_BASE_URL;
 const serverUrl = "/api";
 const hongbao = "🧧"
-const prefix = "【井创SWTC红包DAPP】复制口令：" + hongbao + " ";
+const prefix = "复制口令：" + hongbao + " ";
 const suffix = " 👉【TP】抢红包啦！"
 
 /**
@@ -14,11 +13,11 @@ const suffix = " 👉【TP】抢红包啦！"
  * @param {*} coinType 币种类型
  * @param {*} coinIssuer 币种issuer
  * @param {*} candyAmount 转账数量
+ * @param {*} nonce 交易序列
  */
-export const signTransaction = async (address, coinType, coinIssuer, candyAmount, remark) => {
+export const signTransaction = async (address, coinType, coinIssuer, candyAmount, nonce, remark) => {
     try {
         let toAddress = process.env.VUE_APP_JINGCHUANG_ADDRESS;
-        const nonce = await getNonce(address);
         let amount;
         if (coinType == "SWTC") {
             amount = candyAmount;
@@ -43,7 +42,7 @@ export const signTransaction = async (address, coinType, coinIssuer, candyAmount
                     }
                 }
             ]
-        });
+        }).catch(e => console.log(e));
         return { result: res.result, data: res.data };
     } catch (error) {
         console.log(error)
@@ -75,24 +74,12 @@ export const sendRawTransaction = async (sign) => {
 
 /**
  * 获取地址nonce
- * @param {String} url 井通节点url
  * @param {String} address 钱包地址
  */
-async function getNonce(address) {
-    let random = Math.floor(Math.random() * 2);
-    let data = {
-        "method": "account_info",
-        "params": [
-            {
-                "account": address
-            }
-        ]
-    }
-    let url = "/node" + random;
-    let res = await axios.post(url, data);
-    if (res.data.result.account_data) {
-        return res.data.result.account_data.Sequence;
-    }
+export async function getNonce(address) {
+    let url = serverUrl + "/getNonce?address="+address;
+    let res = await axios.get(url);
+    return res.data;
 }
 
 // 查看交易状态
@@ -194,12 +181,24 @@ export const createCandy = async (candyType, candyNumber, createHash) => {
     return res.data;
 }
 
+export const sendRawTransactionAndCreate = async (candyType, candyNumber, sign) => {
+    let data = {
+        type: parseInt(candyType),
+        num: parseInt(candyNumber),
+        sign: sign
+    }
+    let url = serverUrl + "/sendTransactionAndCreate";
+    let res = await axios.post(url, data);
+    return res.data;
+}
+
 // 抢红包
-export const distributionCandy = async (address, id) => {
+export const distributionCandy = async (address, id, title) => {
     let url = serverUrl + "/grab";
     let data = {
         address: address,
-        id: id
+        id: id,
+        title: title,
     };
     let res = await axios.post(url, data);
     return res.data;
@@ -220,22 +219,36 @@ export const makeUpCandy = async (id) => {
 }
 
 // 获取发出的红包列表
-export const getSendCandyList = async (address) => {
-    let url = serverUrl + "/getPacketByAddr?address=" + address;
+export const getSendCandyList = async (address, year, pageNum) => {
+    let url = serverUrl + "/getPacketByAddr?address=" + address + "&year=" + year + "&pageNum=" + pageNum;
     let res = await axios.get(url);
     return res.data;
 }
 
 // 获取已抢到的红包列表
-export const getObtainCandyList = async (address) => {
-    let url = serverUrl + "/getHistoryByAddr?address=" + address;
+export const getObtainCandyList = async (address, year, pageNum) => {
+    let url = serverUrl + "/getHistoryByAddr?address=" + address + "&year=" + year + "&pageNum=" + pageNum;
     let res = await axios.get(url);
     return res.data;
 }
 
 // 获取红包详情
-export const getCandyDetail = async (id) => {
-    let url = serverUrl + "/getPacketById?id=" + id;
+export const getCandyDetail = async (id, pageNum) => {
+    let url = serverUrl + "/getPacketById?id=" + id + "&pageNum=" + pageNum;
+    let res = await axios.get(url);
+    return res.data;
+}
+
+// 根据地址获取发送红包数量
+export const sendPacketAmount = async (address, year) => {
+    let url = serverUrl + "/sendPacketAmount?address=" + address + "&year=" + year;
+    let res = await axios.get(url);
+    return res.data;
+}
+
+// 根据地址获取领取红包数量
+export const getPacketAmount = async (address, year) => {
+    let url = serverUrl + "/getPacketAmount?address=" + address + "&year=" + year;
     let res = await axios.get(url);
     return res.data;
 }
@@ -311,4 +324,51 @@ export const decodePwd = (password) => {
 // 口令加密
 export const encodePwd = (password) => {
     return (prefix + password + suffix).replace(new RegExp('-', 'g'), hongbao);
+}
+
+// 口令标题解密
+export const decodeTitlePwd = (password) => {
+    password = password.replace("【", "").replace("】", "");
+    // 头部
+    var prefixIndex = password.indexOf(prefix);
+    // 尾部
+    var suffixIndex = password.indexOf(suffix);
+    let result = {};
+    result.title = password.slice(0, prefixIndex);
+    password = password.slice(prefixIndex, suffixIndex)
+    result.password = password.replace(suffix, '').replace(prefix, '').replace(new RegExp(hongbao, 'g'), '-').trim()
+    return result;
+}
+
+// 口令标题加密
+export const encodePwdTitle = (password, title) => {
+    return ("【" + title + "】" + prefix + password + suffix).replace(new RegExp('-', 'g'), hongbao);
+}
+// 格式化金额
+export const formatBalance = (num) => {
+    let data = num.toString();
+    let index = data.toString().indexOf(".");
+    if (index > 0) {
+        return data.slice(0, index + 3);
+    }
+    return data;
+}
+// 获取当前口令标题
+export const getPasswordTitle = async (address) => {
+    let url = serverUrl + "/getPasswordTitle?address=" + address;
+    let res = await axios.get(url);
+    return res.data;
+}
+
+// 设置口令标题
+
+export const setPasswordTitle = async (address, sign, title) => {
+    let data = {
+        address,
+        sign,
+        title
+    }
+    let url = serverUrl + "/setPasswordTitle";
+    let res = await axios.post(url, data);
+    return res.data;
 }
