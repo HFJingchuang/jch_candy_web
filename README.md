@@ -36,3 +36,12 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+#### SWTC&MOAC开发者社区
+
+项目讨论的QQ群：568285439
+
+Telegram: https://t.me/moacblockchain
+
+提案发起（Submit proposal）： https://github.com/JCCDex/ProjectFundingProposal/issues
