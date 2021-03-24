@@ -223,6 +223,10 @@ export default {
       let name = this.tagsName ? this.tagsName : "get";
       this.getList=[];
       this.sendList=[];
+      this.getFinished = false;
+      this.sendFinished = false;
+      this.sendPageNum = 1;
+      this.getPageNum = 1;
       this.onClickTabs(name);
     },
     // 初始化日期选择
