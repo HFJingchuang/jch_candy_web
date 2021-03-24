@@ -272,7 +272,7 @@ export default {
           );
         } else {
           let name = this.coinType + "_jGa9J9TkqtBcUoHe2zqhVFFbgUVED6o9or";
-          if (this.addressBalances["name"]) {
+          if (this.addressBalances[name]) {
             this.currentBalance = this.formatBalance(
               new BigNumber(this.addressBalances[name].value)
                 .minus(this.addressBalances[name].frozen)
