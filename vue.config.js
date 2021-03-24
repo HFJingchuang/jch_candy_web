@@ -34,13 +34,6 @@ module.exports = {
                     '^/api': '/'
                 }
             },
-            '/scan': {
-                target: process.env.VUE_APP_JINGCHANG_SCAN_URL,
-                changeOrigin: true,
-                pathRewrite: {
-                    '^/scan': '/'
-                }
-            },
         },
     },
 

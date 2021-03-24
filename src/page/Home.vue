@@ -3,7 +3,7 @@
  * @Author: gwang
  * @Date: 2020-11-03 14:14:53
  * @LastEditors: gwang
- * @LastEditTime: 2021-03-18 09:37:24
+ * @LastEditTime: 2021-03-24 17:02:00
 -->
 <template>
   <div class="home">
@@ -72,7 +72,6 @@ import { Notify } from "vant";
 import {
   decodeTitlePwd,
   distributionCandy,
-  getAddressBalance,
   getPacketCount
 } from "../js/utils";
 export default {
@@ -91,7 +90,8 @@ export default {
   watch: {
     async message(newVal) {
       this.showOverlay = true;
-      if (newVal.length >= 36) {
+      try {
+        if (newVal.length >= 36) {
         let result = await decodeTitlePwd(newVal);
         this.password = result.password;
         this.title = result.title;
@@ -102,6 +102,9 @@ export default {
         }
       } else {
         Notify({ type: "danger", message: "无效的红包口令" });
+      }
+      } catch (error) {
+        Notify({ type: "danger", message: "抢红包失败" });
       }
       this.showOverlay = false;
     }
@@ -116,41 +119,30 @@ export default {
       this.address = wallet.data.address;
     },
     async getCandy() {
-      let status = await this.getAddressStatus();
-      if (status) {
-        let res = await distributionCandy(this.address, this.password, this.title);
-        if (res.status == 0) {
-          this.showOverlay = false;
-          Notify({
-            type: "success",
-            message: "抢到了" + res.data.amount + " " + res.data.coinType
-          });
-          // 跳转详情
-          this.$router.push({
-            path: "candyDetail",
-            query: {
-              candyId: res.data.candyId
-            }
-          });
-        } else {
-          this.showOverlay = false;
-          Notify({ type: "danger", message: res.msg });
-        }
-        this.loading = false;
+      let res = await distributionCandy(this.address, this.password, this.title);
+      if (res.status == 0) {
+        this.showOverlay = false;
+        Notify({
+          type: "success",
+          message: "抢到了" + res.data.amount + " " + res.data.coinType
+        });
+        // 跳转详情
+        this.$router.push({
+          path: "candyDetail",
+          query: {
+            candyId: res.data.candyId
+          }
+        });
+      } else {
+        this.showOverlay = false;
+        Notify({ type: "danger", message: res.msg });
       }
+      this.loading = false;
     },
     async getCandyCount() {
       let res = await getPacketCount();
       if (res.status == 0) {
         this.candyCount = res.data;
-      }
-    },
-    async getAddressStatus() {
-      let res = await getAddressBalance(this.address);
-      if (res.code == "2004" || res.msg == "该地址未激活") {
-        return false;
-      } else {
-        return true;
       }
     },
     goSendCandyPage() {

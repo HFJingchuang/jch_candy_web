@@ -143,7 +143,7 @@ export const isTransferError = async (hash) => {
  * @param {String} address 
  */
 export const getAddressBalance = async (address) => {
-    let url = "/scan/wallet/balance/ " + new Date().getTime() + "?w=" + address;
+    let url = process.env.VUE_APP_JINGCHANG_SCAN_URL + "/wallet/balance/ " + new Date().getTime() + "?w=" + address;
     let res = await axios.get(url);
     return res.data;
 }
