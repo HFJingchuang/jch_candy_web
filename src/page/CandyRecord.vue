@@ -225,8 +225,8 @@ export default {
       this.sendList=[];
       this.getFinished = false;
       this.sendFinished = false;
-      this.sendPageNum = 1;
-      this.getPageNum = 1;
+      this.sendPageNum = 0;
+      this.getPageNum = 0;
       this.onClickTabs(name);
     },
     // 初始化日期选择
@@ -344,10 +344,10 @@ export default {
       this.tagsName = name;
       if (name == "get") {
         await this.getPacketAmount();
-        await this.getLoad();
+        // await this.getLoad();
       } else {
         await this.sendPacketAmount();
-        await this.sendLoad();
+        // await this.sendLoad();
       }
     },
     copyTextToClipboard(text) {
