@@ -243,6 +243,7 @@ export default {
         //   });
         // }
       }
+      this.showOverlay = false;
       this.clickOnce = false;
     },
     async getBalace() {
